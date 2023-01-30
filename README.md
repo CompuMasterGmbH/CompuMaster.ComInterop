@@ -3,14 +3,14 @@ COM interop library with safe design pattern for COM instancing
 
 ## When you need this COM interop library
 1. COM interop often requires platform additional assemblies with platform dependency for Windows 32/64 bit
-  * Microsoft Office development for Word/Excel/Powerpoint/etc. usualy requires you to add Microsoft's interop assemblies
-  * Microsoft's interop assemblies often cause problems on client machines if there is another MS Office version installed than on the developer's machine
-  * You just want to distribute your little small program to the clients regardless to their installed MS Office version
+   * Microsoft Office development for Word/Excel/Powerpoint/etc. usualy requires you to add Microsoft's interop assemblies
+   * Microsoft's interop assemblies often cause problems on client machines if there is another MS Office version installed than on the developer's machine
+   * You just want to distribute your little small program to the clients regardless to their installed MS Office version
 2. COM interop is often implented wrongly, causing MS Word/Excel/... to stay as process until your application terminates
-  * Usually the application closes successfully if **all** COM objects have been closed and finalized correctly
-  * Unfortunately, the .NET garbage collector can't do it automatically while your application is running
-  * there is the need for finalizing all COM objects on dispose
-3. .NET isn't able to call many methods/properties/fields on COM objects using LateBinding, e.g. `MsExcelAppViaCom.Quit()`
+   * Usually the application closes successfully if **all** COM objects have been closed and finalized correctly
+   * Unfortunately, the .NET garbage collector can't do it automatically while your application is running
+   * there is the need for finalizing all COM objects on dispose
+3. After you created your COM instance e.g. with `CreateObject("Excel.Application")`, .NET isn't able to call many methods/properties/fields on COM objects using LateBinding, e.g. `MsExcelAppViaCom.Quit()`
 
 ## This nice assembly provides these features
 * Access to public fields/properties/methods/function using System.Reflection (which allows calling of `MsExcelAppViaCom.Quit()` again)
@@ -152,19 +152,19 @@ End Class
 
 Usualy provides for your custom implementation
 * Quit/Close application/document and dispose/finalize related COM objects
-  * base.CloseAndDisposeChildrenAndComObject() 
+  * `base.CloseAndDisposeChildrenAndComObject()` 
 * Invoke members of COM object by Reflection (instead of late binding) with several overloads of
-  * base.Invoke...
+  * `base.Invoke...`
 * Direct access to the COM object
-  * base.ComObject
+  * `base.ComObject`
 * Status information on Com object if in-use vs. closed/disposed
-  * base.IsDisposedComObject
+  * `base.IsDisposedComObject`
 
 Usualy requires you to implement
 * constructor method (`Sub New` in VisualBasic)
-* OnDisposeChildren()
+* `OnDisposeChildren()`
   * Close and dispose commands for children objects
-* OnClosing()
+* `OnClosing()`
   * Required close commands for the COM object like App.Quit() or Document.Close()
-* OnClosed()
+* `OnClosed()`
   * Required actions after the COM object has been closed, e.g. removing from a list of open documents
