@@ -18,7 +18,10 @@ COM interop library with safe design pattern for COM instancing
 * The base class comes with 
   * an implementation for the IDisposable interface to dispose/finalize all COM objects incl. their children COM objects correctly 
   * a design pattern which forces the developer to wrap all COM objects into classes inheriting from this base class
-  
+
+## BUT: this assembly does NOT provide 
+* features to run COM remoting on non-Windows platforms
+
 ## Sample implementation for Microsoft Excel
 
 See full sample at https://www.github.com/CompuMasterGmbH/CompuMaster.Excel/
