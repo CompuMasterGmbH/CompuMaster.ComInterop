@@ -28,20 +28,30 @@ Namespace CompuMaster.Test.ComInterop
             Tools.KillAllExcelProcesses() 'Kill all left-overs
         End Sub
 
-        Private Shared Function CreateExcelAppViaCom() As TestClassForExcelApp
-            Dim Result As TestClassForExcelApp = Nothing
+        Private Shared Function IsPlatformSupportingComInterop() As Boolean
             Select Case System.Environment.OSVersion.Platform
                 Case PlatformID.Win32NT, PlatformID.Win32S, PlatformID.Win32Windows
-                    'Expected to run successful
-                    Result = New TestClassForExcelApp()
+                    Return True
                 Case Else
-                    Assert.Throws(Of Exception)(
+                    Return False
+            End Select
+        End Function
+
+        Private Shared Function CreateExcelAppViaCom() As TestClassForExcelApp
+            Dim Result As TestClassForExcelApp = Nothing
+            If IsPlatformSupportingComInterop() Then
+                'Expected to run successful
+                Result = New TestClassForExcelApp()
+                Assert.NotNull(Result)
+            Else
+                Assert.Throws(Of Exception)(
                         Sub()
                             Result = New TestClassForExcelApp()
                         End Sub,
                         "CreateObject/COM not supported on non-windows platforms")
-            End Select
-            Assert.NotNull(Result)
+                Assert.Null(Result)
+                Assert.Ignore("CreateObject/COM not supported on non-windows platforms")
+            End If
             Return Result
         End Function
 
@@ -70,8 +80,20 @@ Namespace CompuMaster.Test.ComInterop
         End Sub
 
         <Test>
-        Public Sub Dummy()
-            Assert.Pass()
+        Public Sub CreateObjectFailing()
+            Dim ComObj As Object
+            If IsPlatformSupportingComInterop() Then
+                'Expected to run successful
+                ComObj = CreateObject("NeverGiveUp.ApplicationWontExist")
+            Else
+                ComObj = CreateObject("NeverGiveUp.ApplicationWontExist")
+                Assert.Throws(Of Exception)(
+                    Sub()
+                        ComObj = New TestClassForExcelApp()
+                    End Sub,
+                    "CreateObject/COM not supported on non-windows platforms")
+            End If
+            Assert.Null(ComObj)
         End Sub
 
     End Class
