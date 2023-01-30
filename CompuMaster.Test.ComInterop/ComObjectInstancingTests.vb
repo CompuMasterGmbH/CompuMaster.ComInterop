@@ -41,7 +41,11 @@ Namespace CompuMaster.Test.ComInterop
             Dim Result As TestClassForExcelApp = Nothing
             If IsPlatformSupportingComInterop() Then
                 'Expected to run successful
-                Result = New TestClassForExcelApp()
+                Try
+                    Result = New TestClassForExcelApp()
+                Catch ex As Exception
+                    Assert.Ignore("Windows platform with COM support, but COM application not available: " & ex.Message)
+                End Try
                 Assert.NotNull(Result)
             Else
                 Assert.Throws(Of Exception)(
@@ -70,6 +74,7 @@ Namespace CompuMaster.Test.ComInterop
             TestClassForExcelApp.Close()
             GC.Collect(2, GCCollectionMode.Forced)
             GC.WaitForPendingFinalizers()
+            Tools.WaitUntilTrueOrTimeout(Function() Tools.ExcelProcesses.Count = 0, New TimeSpan(0, 0, 15))
             System.Threading.Thread.Sleep(3000)
             Assert.AreEqual(0, Tools.ExcelProcesses.Length, "Excel-COM closed, but still " & Tools.ExcelProcesses.Length & " Excel processes running on this machine")
 
@@ -82,18 +87,11 @@ Namespace CompuMaster.Test.ComInterop
         <Test>
         Public Sub CreateObjectFailing()
             Dim ComObj As Object
-            If IsPlatformSupportingComInterop() Then
-                'Expected to run successful
-                ComObj = CreateObject("NeverGiveUp.ApplicationWontExist")
-            Else
-                ComObj = CreateObject("NeverGiveUp.ApplicationWontExist")
-                Assert.Throws(Of Exception)(
+            Assert.Throws(Of Exception)(
                     Sub()
-                        ComObj = New TestClassForExcelApp()
+                        ComObj = CreateObject("NeverGiveUp.ApplicationWontExist")
                     End Sub,
-                    "CreateObject/COM not supported on non-windows platforms")
-            End If
-            Assert.Null(ComObj)
+                    "CreateObject/COM must fail on all platforms / COM application must not exist")
         End Sub
 
     End Class
