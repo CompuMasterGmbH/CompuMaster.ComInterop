@@ -1,13 +1,17 @@
 Public MustInherit Class ComObjectBase
     Implements IDisposable
 
-    Protected Sub New(parentItemResponsibleForDisposal As ComObjectBase, createdComObjectInstance As Object)
+    Protected Sub New(parentItemResponsibleForDisposal As ComObjectBase, createdComObjectInstance As Object,
+                      onDisposeChildrenAction As OnDisposeChildrenAction, onClosingAction As OnClosingAction, onClosedAction As OnClosedAction)
         If createdComObjectInstance Is Nothing Then Throw New ArgumentNullException(NameOf(createdComObjectInstance))
         _ComObject = createdComObjectInstance
         ComObjectType = _ComObject.GetType
         If parentItemResponsibleForDisposal IsNot Nothing AndAlso parentItemResponsibleForDisposal.RegisteredComChildren.Contains(Me) = False Then
             parentItemResponsibleForDisposal.RegisteredComChildren.Add(Me)
         End If
+        Me._OnDisposeChildrenAction = onDisposeChildrenAction
+        Me._OnClosingAction = onClosingAction
+        Me._OnClosedAction = onClosedAction
     End Sub
 
     Private _ComObject As Object
@@ -35,6 +39,7 @@ Public MustInherit Class ComObjectBase
         End Get
     End Property
 
+#Region "Invoke methods"
     'Public Function InvokeFunction(name As String, ParamArray values As Object()) As Object
     '    Return ReflectionTools.InvokeFunction(_ComObject, ComObjectType, name, values)
     'End Function
@@ -86,6 +91,7 @@ Public MustInherit Class ComObjectBase
     Public Sub InvokeFieldSet(Of T)(name As String, values As T())
         ReflectionTools.InvokeFieldSet(Of T)(_ComObject, ComObjectType, name, values)
     End Sub
+#End Region
 
     ''' <summary>
     ''' Create a wrapper for a COM child object (e.g. a Workbooks collection) and register it for automatic disposal with this instance
@@ -95,6 +101,18 @@ Public MustInherit Class ComObjectBase
     ''' <returns>The wrapper class of the COM child</returns>
     Public Function CreateWrapperAndRegisterComChildForDispoal(Of TChildComObject As Class)(comObject As TChildComObject) As ComChildObject(Of TChildComObject, ComObjectBase)
         Dim ChildWrapper As New ComChildObject(Of TChildComObject, ComObjectBase)(Me, comObject)
+        Me.RegisteredComChildren.Add(ChildWrapper)
+        Return ChildWrapper
+    End Function
+
+    ''' <summary>
+    ''' Create a wrapper for a COM child object (e.g. a Workbooks collection) and register it for automatic disposal with this instance
+    ''' </summary>
+    ''' <typeparam name="TChildComObject"></typeparam>
+    ''' <param name="comObject"></param>
+    ''' <returns>The wrapper class of the COM child</returns>
+    Public Function CreateWrapperAndRegisterComChildForDispoal(Of TChildComObject As Class)(comObject As TChildComObject, onDisposeChildrenAction As OnDisposeChildrenAction, onClosingAction As OnClosingAction, onClosedAction As OnClosedAction) As ComChildObject(Of TChildComObject, ComObjectBase)
+        Dim ChildWrapper As New ComChildObject(Of TChildComObject, ComObjectBase)(Me, comObject, onDisposeChildrenAction, onClosingAction, onClosedAction)
         Me.RegisteredComChildren.Add(ChildWrapper)
         Return ChildWrapper
     End Function
@@ -125,6 +143,30 @@ Public MustInherit Class ComObjectBase
     ''' </summary>
     Protected MustOverride Sub OnClosed()
 
+    Private _OnDisposeChildrenAction As OnDisposeChildrenAction
+    Public Delegate Sub OnDisposeChildrenAction(instance As ComObjectBase)
+
+    Private _OnClosingAction As OnClosingAction
+    Public Delegate Sub OnClosingAction(instance As ComObjectBase)
+
+    Private _OnClosedAction As OnClosedAction
+    Public Delegate Sub OnClosedAction(instance As ComObjectBase)
+
+    Private Sub _OnDisposeChildren()
+        If _OnDisposeChildrenAction IsNot Nothing Then _OnDisposeChildrenAction(Me)
+        OnDisposeChildren()
+    End Sub
+
+    Private Sub _OnClosing()
+        If _OnClosingAction IsNot Nothing Then _OnClosingAction(Me)
+        OnClosing()
+    End Sub
+
+    Private Sub _OnClosed()
+        If _OnClosedAction IsNot Nothing Then _OnClosedAction(Me)
+        OnClosed()
+    End Sub
+
     Private Sub DisposeRegisteredComChildren()
         For MyCounter As Integer = 0 To Me.RegisteredComChildren.Count - 1
             Me.RegisteredComChildren(MyCounter).Dispose()
@@ -144,13 +186,13 @@ Public MustInherit Class ComObjectBase
             If disposing Then
                 If isGC And IgnoreMissingMethodExceptionsOnFinalize Then
                     Try
-                        OnDisposeChildren()
+                        _OnDisposeChildren()
                         DisposeRegisteredComChildren()
                     Catch
                         'ignore
                     End Try
                 Else
-                    OnDisposeChildren()
+                    _OnDisposeChildren()
                     DisposeRegisteredComChildren()
                 End If
             End If
@@ -159,24 +201,24 @@ Public MustInherit Class ComObjectBase
                 'Nicht verwaltete Ressourcen (nicht verwaltete Objekte) freigeben und Finalizer überschreiben
                 If isGC And IgnoreMissingMethodExceptionsOnFinalize Then
                     Try
-                        OnClosing()
+                        _OnClosing()
                     Catch ex As System.MissingMethodException
                         'ignore
                     Catch
                         'ignore
                     End Try
                 Else
-                    OnClosing()
+                    _OnClosing()
                 End If
                 ComTools.ReleaseComObject(_ComObject)
                 If isGC And IgnoreMissingMethodExceptionsOnFinalize Then
                     Try
-                        OnClosed()
+                        _OnClosed()
                     Catch
                         'ignore
                     End Try
                 Else
-                    OnClosed()
+                    _OnClosed()
                 End If
                 'Große Felder auf NULL setzen
                 _ComObject = Nothing

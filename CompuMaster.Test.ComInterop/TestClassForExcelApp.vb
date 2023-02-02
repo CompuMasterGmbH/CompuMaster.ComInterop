@@ -3,7 +3,11 @@
 
 #Disable Warning CA1416 ' Diese Aufrufsite ist auf allen Plattformen erreichbar
     Public Sub New()
-        MyBase.New(Nothing, CreateObject("Excel.Application"))
+        MyBase.New(Nothing,
+                   CreateObject("Excel.Application"),
+                   Nothing,
+                   Nothing,
+                   Nothing)
     End Sub
 #Enable Warning CA1416 ' Diese Aufrufsite ist auf allen Plattformen erreichbar
 

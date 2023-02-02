@@ -4,7 +4,7 @@ Public Class PseudoComRootNodeWrapper
     Inherits ComRootObject(Of PseudoComRootNodeObject)
 
     Public Sub New(comObject As PseudoComRootNodeObject)
-        MyBase.New(comObject)
+        MyBase.New(comObject, Nothing)
         Modules = New PseudoComCollectionWrapper(Me, New PseudoComCollectionObject(3))
     End Sub
 

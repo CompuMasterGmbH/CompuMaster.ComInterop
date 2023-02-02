@@ -13,7 +13,7 @@ Namespace CompuMaster.Test.ComInterop
             End If
         End Sub
 
-        <OneTimeSetUp>
+        <SetUp>
         Public Sub Setup()
             Console.WriteLine("Setup: " & Tools.ExcelProcesses.Count & " Excel processes found")
             If Tools.ExcelProcesses.Length <> 0 Then
@@ -74,14 +74,22 @@ Namespace CompuMaster.Test.ComInterop
             TestClassForExcelApp.Close()
             GC.Collect(2, GCCollectionMode.Forced)
             GC.WaitForPendingFinalizers()
-            Tools.WaitUntilTrueOrTimeout(Function() Tools.ExcelProcesses.Count = 0, New TimeSpan(0, 0, 15))
-            System.Threading.Thread.Sleep(3000)
+            Tools.WaitUntilTrueOrTimeout(Function() Tools.ExcelProcesses.Length = 0, New TimeSpan(0, 0, 7))
             Assert.AreEqual(0, Tools.ExcelProcesses.Length, "Excel-COM closed, but still " & Tools.ExcelProcesses.Length & " Excel processes running on this machine")
 
             TestClassForExcelApp.Close()
             GC.Collect(2, GCCollectionMode.Forced)
             GC.WaitForPendingFinalizers()
             Assert.AreEqual(0, Tools.ExcelProcesses.Length, "Closing an Excel-COM for the 2nd time still doesn't change anything")
+
+            Dim JitExcelApp As New Global.CompuMaster.ComInterop.ComRootObject(Of Object)(CreateObject("Excel.Application"), Sub(instance) instance.InvokeMethod("Quit"))
+            Assert.AreEqual(1, Tools.ExcelProcesses.Length, "Tests can't be executed while Excel processes are started on this machine")
+            JitExcelApp.Dispose()
+            GC.Collect(2, GCCollectionMode.Forced)
+            GC.WaitForPendingFinalizers()
+            Tools.WaitUntilTrueOrTimeout(Function() Tools.ExcelProcesses.Length = 0, New TimeSpan(0, 0, 7))
+            Assert.AreEqual(0, Tools.ExcelProcesses.Length, "Excel-COM closed, but still " & Tools.ExcelProcesses.Length & " Excel processes running on this machine")
+
         End Sub
 
         <Test>

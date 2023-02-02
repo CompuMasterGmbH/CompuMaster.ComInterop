@@ -6,7 +6,7 @@ Public Class ComRootAndChildObjects
 
     <Test>
     Public Sub TestComRoot()
-        Dim ComRoot As New ComRootObject(Of String)("")
+        Dim ComRoot As New ComRootObject(Of String)("", Nothing)
         Assert.AreEqual("", ComRoot.ComObject)
 
         Dim ComChild As New ComChildObject(Of String, ComRootObject(Of String))(ComRoot, "")

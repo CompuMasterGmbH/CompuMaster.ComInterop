@@ -6,9 +6,9 @@ Namespace CompuMaster.Test.ComInterop
 
         <Test, Explicit("Run on demand, only")>
         Public Sub ForceKillForAllExcelProcesses()
-            Assert.AreNotEqual(0, Tools.ExcelProcesses.Length, "Test can be executed ONLY while Excel processes are started on this machine")
-            Tools.KillAllExcelProcesses()
-            Assert.AreEqual(0, Tools.ExcelProcesses.Length, "Tests can't be executed while Excel processes are started on this machine")
+            If Tools.ExcelProcesses.Length = 0 Then Assert.Ignore("Test can be executed ONLY while Excel processes are started on this machine")
+            Tools.KillAllExcelProcesses(True)
+            Assert.AreEqual(0, Tools.ExcelProcesses.Length, "All excel processes have been killed, but still they are available; tests can't be executed while Excel processes are started on this machine")
         End Sub
 
     End Class

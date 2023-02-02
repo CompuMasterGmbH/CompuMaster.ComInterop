@@ -5,55 +5,54 @@
 Public Class ComRootObject(Of TComObject)
     Inherits ComObjectBase
 
-    Public Sub New(obj As TComObject)
-        MyBase.New(Nothing, obj)
+    ''' <summary>
+    ''' Create a new COM root object e.g. for Excel.Application
+    ''' </summary>
+    ''' <param name="obj"></param>
+    ''' <param name="onClosingAction">A close action, usually a method call to quit the application</param>
+    Public Sub New(obj As TComObject, onClosingAction As OnClosingAction)
+        Me.New(obj, Nothing, onClosingAction, Nothing)
     End Sub
 
     Public Sub New(obj As TComObject,
                            onDisposeChildrenAction As OnDisposeChildrenAction, onClosingAction As OnClosingAction, onClosedAction As OnClosedAction)
-        MyBase.New(Nothing, obj)
-        Me._OnDisposeChildrenAction = onDisposeChildrenAction
-        Me._OnClosingAction = onClosingAction
-        Me._OnClosedAction = onClosedAction
+        MyBase.New(Nothing, obj, onDisposeChildrenAction, onClosingAction, onClosedAction)
     End Sub
 
-    Protected Friend Sub New(parentItemResponsibleForDisposal As Global.CompuMaster.ComInterop.ComObjectBase, obj As TComObject)
-        MyBase.New(parentItemResponsibleForDisposal, obj)
+    Protected Friend Sub New(parentItemResponsibleForDisposal As Global.CompuMaster.ComInterop.ComObjectBase, obj As TComObject, onClosingAction As OnClosingAction)
+        MyBase.New(parentItemResponsibleForDisposal, obj, Nothing, onClosingAction, Nothing)
     End Sub
 
     Protected Friend Sub New(parentItemResponsibleForDisposal As Global.CompuMaster.ComInterop.ComObjectBase, obj As TComObject,
                            onDisposeChildrenAction As OnDisposeChildrenAction, onClosingAction As OnClosingAction, onClosedAction As OnClosedAction)
-        MyBase.New(parentItemResponsibleForDisposal, obj)
-        Me._OnDisposeChildrenAction = onDisposeChildrenAction
-        Me._OnClosingAction = onClosingAction
-        Me._OnClosedAction = onClosedAction
+        MyBase.New(parentItemResponsibleForDisposal, obj, onDisposeChildrenAction, onClosingAction, onClosedAction)
     End Sub
 
-    Private _OnDisposeChildrenAction As OnDisposeChildrenAction
-    Public Delegate Sub OnDisposeChildrenAction(instance As ComRootObject(Of TComObject))
-
-    Private _OnClosingAction As OnClosingAction
-    Public Delegate Sub OnClosingAction(instance As ComRootObject(Of TComObject))
-
-    Private _OnClosedAction As OnClosedAction
-    Public Delegate Sub OnClosedAction(instance As ComRootObject(Of TComObject))
-
-    Protected Overrides Sub OnDisposeChildren()
-        If _OnDisposeChildrenAction IsNot Nothing Then _OnDisposeChildrenAction(Me)
+    ''' <summary>
+    ''' Close/quit the application
+    ''' </summary>
+    ''' <remarks>Identical as calling method Dispose() directly</remarks>
+    Public Sub Close()
+        Me.Dispose()
     End Sub
 
-    Protected Overrides Sub OnClosing()
-        If _OnClosingAction IsNot Nothing Then _OnClosingAction(Me)
-    End Sub
-
-    Protected Overrides Sub OnClosed()
-        If _OnClosedAction IsNot Nothing Then _OnClosedAction(Me)
-    End Sub
-
+    ''' <summary>
+    ''' The COM object with its accessible members
+    ''' </summary>
+    ''' <returns></returns>
     Public ReadOnly Property ComObjectStronglyTyped As TComObject
         Get
             Return CType(MyBase.ComObject, TComObject)
         End Get
     End Property
+
+    Protected Overrides Sub OnDisposeChildren()
+    End Sub
+
+    Protected Overrides Sub OnClosing()
+    End Sub
+
+    Protected Overrides Sub OnClosed()
+    End Sub
 
 End Class

@@ -11,7 +11,7 @@ Public Class ComChildObject(Of TComObject As Class, TParentWrapper As ComObjectB
     End Sub
 
     Public Sub New(parentItemResponsibleForDisposal As ComObjectBase, parentItem As TParentWrapper, obj As TComObject)
-        MyBase.New(parentItemResponsibleForDisposal, obj)
+        MyBase.New(parentItemResponsibleForDisposal, obj, Nothing, Nothing, Nothing)
         Me.Parent = parentItem
     End Sub
 
