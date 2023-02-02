@@ -1,9 +1,11 @@
 ﻿Public Class TestClassForExcelApp
     Inherits Global.CompuMaster.ComInterop.ComObjectBase
 
+#Disable Warning CA1416 ' Diese Aufrufsite ist auf allen Plattformen erreichbar
     Public Sub New()
         MyBase.New(Nothing, CreateObject("Excel.Application"))
     End Sub
+#Enable Warning CA1416 ' Diese Aufrufsite ist auf allen Plattformen erreichbar
 
     Public Property UserControl As Boolean
         Get

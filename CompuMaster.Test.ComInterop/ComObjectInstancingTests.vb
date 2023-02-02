@@ -89,7 +89,9 @@ Namespace CompuMaster.Test.ComInterop
             Dim ComObj As Object
             Assert.Throws(Of Exception)(
                     Sub()
+#Disable Warning CA1416 ' Diese Aufrufsite ist auf allen Plattformen erreichbar
                         ComObj = CreateObject("NeverGiveUp.ApplicationWontExist")
+#Enable Warning CA1416 ' Diese Aufrufsite ist auf allen Plattformen erreichbar
                     End Sub,
                     "CreateObject/COM must fail on all platforms / COM application must not exist")
         End Sub

@@ -87,6 +87,26 @@ Public MustInherit Class ComObjectBase
         ReflectionTools.InvokeFieldSet(Of T)(_ComObject, ComObjectType, name, values)
     End Sub
 
+    ''' <summary>
+    ''' Create a wrapper for a COM child object (e.g. a Workbooks collection) and register it for automatic disposal with this instance
+    ''' </summary>
+    ''' <typeparam name="TChildComObject"></typeparam>
+    ''' <param name="comObject"></param>
+    ''' <returns>The wrapper class of the COM child</returns>
+    Public Function CreateWrapperAndRegisterComChildForDispoal(Of TChildComObject As Class)(comObject As TChildComObject) As ComChildObject(Of TChildComObject, ComObjectBase)
+        Dim ChildWrapper As New ComChildObject(Of TChildComObject, ComObjectBase)(Me, comObject)
+        Me.RegisteredComChildren.Add(ChildWrapper)
+        Return ChildWrapper
+    End Function
+
+    ''' <summary>
+    ''' Register an independent wrapper class to be disposed when this object disposes
+    ''' </summary>
+    ''' <param name="childWrapper"></param>
+    Public Sub RegisterComChildForDispoal(childWrapper As ComObjectBase)
+        Me.RegisteredComChildren.Add(childWrapper)
+    End Sub
+
 #Region "IDisposable"
     Private RegisteredComChildren As New List(Of ComObjectBase)
 
