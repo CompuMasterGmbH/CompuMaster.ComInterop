@@ -3,7 +3,7 @@
 ''' </summary>
 ''' <typeparam name="TParentWrapper">A type of the wrapper for the parent node</typeparam>
 ''' <typeparam name="TComObject">A type of the child node (usually used with COM interop assemblies) or just a System.Object</typeparam>
-Public Class ComChildObject(Of TComObject As Class, TParentWrapper As ComObjectBase)
+Public Class ComChildObject(Of TParentWrapper As ComObjectBase, TComObject As Class)
     Inherits ComRootObject(Of TComObject)
 
     Public Sub New(parentItem As TParentWrapper, obj As TComObject)

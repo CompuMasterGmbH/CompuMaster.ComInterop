@@ -9,7 +9,7 @@ Public Class ComRootAndChildObjects
         Dim ComRoot As New ComRootObject(Of String)("", Nothing)
         Assert.AreEqual("", ComRoot.ComObject)
 
-        Dim ComChild As New ComChildObject(Of String, ComRootObject(Of String))(ComRoot, "")
+        Dim ComChild As New ComChildObject(Of ComRootObject(Of String), String)(ComRoot, "")
         Assert.AreEqual("", ComChild.ComObject)
         Assert.IsNotNull(ComChild.Parent)
 

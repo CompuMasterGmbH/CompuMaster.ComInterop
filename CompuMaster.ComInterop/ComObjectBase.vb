@@ -87,8 +87,8 @@ Public MustInherit Class ComObjectBase
     ''' <typeparam name="TChildComObject"></typeparam>
     ''' <param name="comObject"></param>
     ''' <returns>The wrapper class of the COM child</returns>
-    Public Function CreateWrapperAndRegisterComChildForDispoal(Of TChildComObject As Class)(comObject As TChildComObject) As ComChildObject(Of TChildComObject, ComObjectBase)
-        Dim ChildWrapper As New ComChildObject(Of TChildComObject, ComObjectBase)(Me, comObject)
+    Public Function CreateWrapperAndRegisterComChildForDispoal(Of TChildComObject As Class)(comObject As TChildComObject) As ComChildObject(Of ComObjectBase, TChildComObject)
+        Dim ChildWrapper As New ComChildObject(Of ComObjectBase, TChildComObject)(Me, comObject)
         Me.RegisteredComChildren.Add(ChildWrapper)
         Return ChildWrapper
     End Function
@@ -99,8 +99,8 @@ Public MustInherit Class ComObjectBase
     ''' <typeparam name="TChildComObject"></typeparam>
     ''' <param name="comObject"></param>
     ''' <returns>The wrapper class of the COM child</returns>
-    Public Function CreateWrapperAndRegisterComChildForDispoal(Of TChildComObject As Class)(comObject As TChildComObject, onDisposeChildrenAction As OnDisposeChildrenAction, onClosingAction As OnClosingAction, onClosedAction As OnClosedAction) As ComChildObject(Of TChildComObject, ComObjectBase)
-        Dim ChildWrapper As New ComChildObject(Of TChildComObject, ComObjectBase)(Me, comObject, onDisposeChildrenAction, onClosingAction, onClosedAction)
+    Public Function CreateWrapperAndRegisterComChildForDispoal(Of TChildComObject As Class)(comObject As TChildComObject, onDisposeChildrenAction As OnDisposeChildrenAction, onClosingAction As OnClosingAction, onClosedAction As OnClosedAction) As ComChildObject(Of ComObjectBase, TChildComObject)
+        Dim ChildWrapper As New ComChildObject(Of ComObjectBase, TChildComObject)(Me, comObject, onDisposeChildrenAction, onClosingAction, onClosedAction)
         Me.RegisteredComChildren.Add(ChildWrapper)
         Return ChildWrapper
     End Function

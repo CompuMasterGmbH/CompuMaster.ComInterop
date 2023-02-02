@@ -1,7 +1,7 @@
 ﻿Imports CompuMaster.ComInterop
 
 Public Class PseudoComCollectionWrapper
-    Inherits ObjectReadOnlyCollectionBase(Of PseudoComCollectionObject, PseudoComCollectionWrapper, PseudoComRootNodeWrapper, PseudoComItemObject, PseudoComItemWrapper)
+    Inherits ObjectReadOnlyCollectionBase(Of PseudoComRootNodeWrapper, PseudoComCollectionObject, PseudoComCollectionWrapper, PseudoComItemObject, PseudoComItemWrapper)
 
     Public Sub New(parentItemResponsibleForDisposal As PseudoComRootNodeWrapper, createdComObjectInstance As PseudoComCollectionObject)
         MyBase.New(parentItemResponsibleForDisposal, createdComObjectInstance)

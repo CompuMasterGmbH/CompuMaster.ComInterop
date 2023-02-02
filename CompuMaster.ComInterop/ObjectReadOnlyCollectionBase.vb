@@ -1,10 +1,10 @@
-﻿Public MustInherit Class ObjectReadOnlyCollectionBase(Of TCollectionComObject As Class,
-                                                          TCollectionWrapper As ComChildObject(Of TCollectionComObject, TParentWrapper),
-                                                          TParentWrapper As ComObjectBase,
+﻿Public MustInherit Class ObjectReadOnlyCollectionBase(Of TParentWrapper As ComObjectBase,
+                                                          TCollectionComObject As Class,
+                                                          TCollectionWrapper As ComChildObject(Of TParentWrapper, TCollectionComObject),
                                                           TChildComObject As Class,
-                                                          TChildWrapper As ComChildObject(Of TChildComObject, TCollectionWrapper)
+                                                          TChildWrapper As ComChildObject(Of TCollectionWrapper, TChildComObject)
                                                           )
-    Inherits ComChildObject(Of TCollectionComObject, TParentWrapper)
+    Inherits ComChildObject(Of TParentWrapper, TCollectionComObject)
 
     Public Sub New(parentItemResponsibleForDisposal As TParentWrapper, createdComObjectInstance As TCollectionComObject)
         MyBase.New(parentItemResponsibleForDisposal, createdComObjectInstance)
