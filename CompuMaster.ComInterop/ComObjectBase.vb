@@ -176,7 +176,9 @@ Public MustInherit Class ComObjectBase
 
     Protected Overridable Sub Dispose(disposing As Boolean)
         If Not disposedValue Then
-            OnBeforeClosing()
+            If _ComObject IsNot Nothing Then
+                OnBeforeClosing()
+            End If
 
             If disposing Then
                 If isGC And IgnoreMissingMethodExceptionsOnFinalize Then
