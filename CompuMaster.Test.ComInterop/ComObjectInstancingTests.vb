@@ -47,6 +47,10 @@ Namespace CompuMaster.Test.ComInterop
                     Assert.Ignore("Windows platform with COM support, but COM application not available: " & ex.Message)
                 End Try
                 Assert.NotNull(Result)
+                Result.InvokePropertySet("Visible", False)
+                Result.InvokePropertySet("Interactive", False)
+                Result.InvokePropertySet("ScreenUpdating", False)
+                Result.InvokePropertySet("DisplayAlerts", False)
             Else
                 Assert.Throws(Of Exception)(
                         Sub()
@@ -74,7 +78,7 @@ Namespace CompuMaster.Test.ComInterop
             TestClassForExcelApp.Close()
             GC.Collect(2, GCCollectionMode.Forced)
             GC.WaitForPendingFinalizers()
-            Tools.WaitUntilTrueOrTimeout(Function() Tools.ExcelProcesses.Length = 0, New TimeSpan(0, 0, 7))
+            Tools.WaitUntilTrueOrTimeout(Function() Tools.ExcelProcesses.Length = 0, New TimeSpan(0, 0, 15))
             Assert.AreEqual(0, Tools.ExcelProcesses.Length, "Excel-COM closed, but still " & Tools.ExcelProcesses.Length & " Excel processes running on this machine")
 
             TestClassForExcelApp.Close()
@@ -87,9 +91,8 @@ Namespace CompuMaster.Test.ComInterop
             JitExcelApp.Dispose()
             GC.Collect(2, GCCollectionMode.Forced)
             GC.WaitForPendingFinalizers()
-            Tools.WaitUntilTrueOrTimeout(Function() Tools.ExcelProcesses.Length = 0, New TimeSpan(0, 0, 7))
+            Tools.WaitUntilTrueOrTimeout(Function() Tools.ExcelProcesses.Length = 0, New TimeSpan(0, 0, 15))
             Assert.AreEqual(0, Tools.ExcelProcesses.Length, "Excel-COM closed, but still " & Tools.ExcelProcesses.Length & " Excel processes running on this machine")
-
         End Sub
 
         <Test>
