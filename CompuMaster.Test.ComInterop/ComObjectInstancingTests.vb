@@ -96,6 +96,38 @@ Namespace CompuMaster.Test.ComInterop
         End Sub
 
         <Test>
+        Public Sub ExcelProcessesConcurrentlyStartedAndClosed()
+            Assert.AreEqual(0, Tools.ExcelProcesses.Length, "Tests can't be executed while Excel processes are started on this machine")
+
+            Dim TestClassForExcelApp1 As TestClassForExcelApp = CreateExcelAppViaCom()
+            Assert.AreEqual(1, Tools.ExcelProcesses.Length, "Tests can't be executed while Excel processes are started on this machine")
+            Assert.AreEqual(False, TestClassForExcelApp1.Visible)
+
+            Dim TestClassForExcelApp2 As TestClassForExcelApp = CreateExcelAppViaCom()
+            Assert.AreEqual(2, Tools.ExcelProcesses.Length, "Tests can't be executed while Excel processes are started on this machine")
+            Assert.AreEqual(False, TestClassForExcelApp2.Visible)
+
+            TestClassForExcelApp2.Close()
+            GC.Collect(2, GCCollectionMode.Forced)
+            GC.WaitForPendingFinalizers()
+            Tools.WaitUntilTrueOrTimeout(Function() Tools.ExcelProcesses.Length = 1, New TimeSpan(0, 0, 15))
+            Assert.AreEqual(1, Tools.ExcelProcesses.Length, "Excel-COM closed, but still " & Tools.ExcelProcesses.Length & " Excel processes running on this machine")
+            Assert.Catch(Of System.Exception)(Function()
+                                                  Return TestClassForExcelApp2.Visible
+                                              End Function, "Property shouldn't be accessible any more")
+            Assert.AreEqual(False, TestClassForExcelApp1.Visible, "Property should be accessible further more")
+
+            TestClassForExcelApp1.Close()
+            GC.Collect(2, GCCollectionMode.Forced)
+            GC.WaitForPendingFinalizers()
+            Tools.WaitUntilTrueOrTimeout(Function() Tools.ExcelProcesses.Length = 0, New TimeSpan(0, 0, 15))
+            Assert.AreEqual(0, Tools.ExcelProcesses.Length, "Excel-COM closed, but still " & Tools.ExcelProcesses.Length & " Excel processes running on this machine")
+            Assert.Catch(Of System.Exception)(Function()
+                                                  Return TestClassForExcelApp1.Visible
+                                              End Function, "Property shouldn't be accessible any more")
+        End Sub
+
+        <Test>
         Public Sub CreateObjectFailing()
             Dim ComObj As Object
             Assert.Throws(Of Exception)(
