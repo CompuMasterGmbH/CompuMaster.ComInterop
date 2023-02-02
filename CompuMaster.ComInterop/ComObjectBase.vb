@@ -40,10 +40,6 @@ Public MustInherit Class ComObjectBase
     End Property
 
 #Region "Invoke methods"
-    'Public Function InvokeFunction(name As String, ParamArray values As Object()) As Object
-    '    Return ReflectionTools.InvokeFunction(_ComObject, ComObjectType, name, values)
-    'End Function
-
     Public Function InvokeFunction(Of T)(name As String, ParamArray values As Object()) As T
         Return ReflectionTools.InvokeFunction(Of T)(_ComObject, ComObjectType, name, values)
     End Function
@@ -51,10 +47,6 @@ Public MustInherit Class ComObjectBase
     Public Sub InvokeMethod(name As String, ParamArray values As Object())
         ReflectionTools.InvokeMethod(_ComObject, ComObjectType, name, values)
     End Sub
-
-    'Public Function InvokePropertyGet(name As String) As Object
-    '    Return ReflectionTools.InvokePropertyGet(_ComObject, ComObjectType, name)
-    'End Function
 
     Public Function InvokePropertyGet(name As String, propertyArrayItem As Object) As Object
         Return ReflectionTools.InvokePropertyGet(_ComObject, ComObjectType, name, propertyArrayItem)
@@ -75,10 +67,6 @@ Public MustInherit Class ComObjectBase
     Public Sub InvokePropertySet(Of T)(name As String, values As T())
         ReflectionTools.InvokePropertySet(Of T)(_ComObject, ComObjectType, name, values)
     End Sub
-
-    'Public Function InvokeFieldGet(name As String) As Object
-    '    Return ReflectionTools.InvokeFieldGet(_ComObject, ComObjectType, name)
-    'End Function
 
     Public Function InvokeFieldGet(Of T)(name As String) As T
         Return ReflectionTools.InvokeFieldGet(Of T)(_ComObject, ComObjectType, name)
