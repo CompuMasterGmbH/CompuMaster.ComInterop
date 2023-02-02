@@ -3,7 +3,6 @@
   <PropertyGroup>
     <RootNamespace>CompuMaster.ComInterop</RootNamespace>
     <TargetFrameworks>netstandard2.1;net48</TargetFrameworks>
-    <Version>1.0.1.0</Version>
     <Company>CompuMaster GmbH</Company>
     <Copyright>2023 CompuMaster GmbH</Copyright>
     <Title>CompuMaster.ComInterop</Title>
