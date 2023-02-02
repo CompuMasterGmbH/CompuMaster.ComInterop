@@ -117,6 +117,11 @@ Public MustInherit Class ComObjectBase
     Private RegisteredComChildren As New List(Of ComObjectBase)
 
     ''' <summary>
+    ''' Actions before close and dispose commands for children objects and this object 
+    ''' </summary>
+    Protected MustOverride Sub OnBeforeClosing()
+
+    ''' <summary>
     ''' Close and dispose commands for children objects
     ''' </summary>
     Protected MustOverride Sub OnDisposeChildren()
@@ -171,6 +176,8 @@ Public MustInherit Class ComObjectBase
 
     Protected Overridable Sub Dispose(disposing As Boolean)
         If Not disposedValue Then
+            OnBeforeClosing()
+
             If disposing Then
                 If isGC And IgnoreMissingMethodExceptionsOnFinalize Then
                     Try

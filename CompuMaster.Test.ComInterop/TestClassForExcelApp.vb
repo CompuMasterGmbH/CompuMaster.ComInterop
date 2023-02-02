@@ -36,14 +36,7 @@
     End Property
 
     Public Sub Close()
-        Me.Quit()
-    End Sub
-
-    Public Sub Quit()
-        If Not IsDisposedComObject Then
-            UserControl = True
-            MyBase.CloseAndDisposeChildrenAndComObject()
-        End If
+        MyBase.CloseAndDisposeChildrenAndComObject()
     End Sub
 
     Protected Overrides Sub OnDisposeChildren()
@@ -54,7 +47,10 @@
     End Sub
 
     Protected Overrides Sub OnClosed()
-        GC.Collect(2, GCCollectionMode.Forced, True)
+    End Sub
+
+    Protected Overrides Sub OnBeforeClosing()
+        UserControl = True
     End Sub
 
 End Class
