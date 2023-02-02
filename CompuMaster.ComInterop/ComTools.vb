@@ -9,7 +9,11 @@ Public NotInheritable Class ComTools
     Public Shared Sub ReleaseComObject(ByVal obj As Object)
         Try
             If obj IsNot Nothing Then
-                System.Runtime.InteropServices.Marshal.ReleaseComObject(obj)
+                Dim RemainingComReferencesToRelease As Integer = System.Runtime.InteropServices.Marshal.ReleaseComObject(obj)
+                Do While RemainingComReferencesToRelease > 0
+                    RemainingComReferencesToRelease = System.Runtime.InteropServices.Marshal.ReleaseComObject(obj)
+                Loop
+                System.Runtime.InteropServices.Marshal.FinalReleaseComObject(obj)
                 obj = Nothing
             End If
         Catch
