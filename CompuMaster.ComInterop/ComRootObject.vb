@@ -29,11 +29,21 @@ Public Class ComRootObject(Of TComObject)
     End Sub
 
     ''' <summary>
+    ''' Is the COM object closed and disposed
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property IsClosed As Boolean
+        Get
+            Return MyBase.IsDisposedComObject
+        End Get
+    End Property
+
+    ''' <summary>
     ''' Close/quit the application
     ''' </summary>
     ''' <remarks>Identical as calling method Dispose() directly</remarks>
     Public Sub Close()
-        Me.Dispose()
+        MyBase.CloseAndDisposeChildrenAndComObject()
     End Sub
 
     ''' <summary>
@@ -53,6 +63,9 @@ Public Class ComRootObject(Of TComObject)
     End Sub
 
     Protected Overrides Sub OnClosed()
+    End Sub
+
+    Protected Overrides Sub OnBeforeClosing()
     End Sub
 
 End Class
