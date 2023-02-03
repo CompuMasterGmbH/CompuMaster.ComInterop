@@ -1,24 +1,28 @@
 ﻿Option Explicit On
 Option Strict On
 
-''' <summary>
-''' COM interop tools
-''' </summary>
-Public NotInheritable Class ComTools
+Namespace CompuMaster.ComInterop
 
-    Public Shared Sub ReleaseComObject(ByVal obj As Object)
-        Try
-            If obj IsNot Nothing Then
-                Dim RemainingComReferencesToRelease As Integer = System.Runtime.InteropServices.Marshal.ReleaseComObject(obj)
-                Do While RemainingComReferencesToRelease > 0
-                    RemainingComReferencesToRelease = System.Runtime.InteropServices.Marshal.ReleaseComObject(obj)
-                Loop
-                System.Runtime.InteropServices.Marshal.FinalReleaseComObject(obj)
+    ''' <summary>
+    ''' COM interop tools
+    ''' </summary>
+    Public NotInheritable Class ComTools
+
+        Public Shared Sub ReleaseComObject(ByVal obj As Object)
+            Try
+                If obj IsNot Nothing Then
+                    Dim RemainingComReferencesToRelease As Integer = System.Runtime.InteropServices.Marshal.ReleaseComObject(obj)
+                    Do While RemainingComReferencesToRelease > 0
+                        RemainingComReferencesToRelease = System.Runtime.InteropServices.Marshal.ReleaseComObject(obj)
+                    Loop
+                    System.Runtime.InteropServices.Marshal.FinalReleaseComObject(obj)
+                    obj = Nothing
+                End If
+            Catch
                 obj = Nothing
-            End If
-        Catch
-            obj = Nothing
-        End Try
-    End Sub
+            End Try
+        End Sub
 
-End Class
+    End Class
+
+End Namespace

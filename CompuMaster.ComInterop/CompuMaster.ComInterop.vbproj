@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <RootNamespace>CompuMaster.ComInterop</RootNamespace>
+    <RootNamespace></RootNamespace>
     <TargetFrameworks>netstandard2.1;net48</TargetFrameworks>
     <Company>CompuMaster GmbH</Company>
     <Copyright>2023 CompuMaster GmbH</Copyright>
@@ -26,6 +26,10 @@
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CompuMaster.Reflection" Version="1.0.0" />
   </ItemGroup>
 
 </Project>
