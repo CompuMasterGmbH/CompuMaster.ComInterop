@@ -20,24 +20,37 @@ Namespace CompuMaster.ComInterop
         End Sub
 
         Private _ComObject As Object
+        ''' <summary>
+        ''' The COM object
+        ''' </summary>
+        ''' <returns></returns>
         Public ReadOnly Property ComObject As Object
             Get
                 Return _ComObject
             End Get
         End Property
 
+        ''' <summary>
+        ''' The ComObject's runtime-type
+        ''' </summary>
+        ''' <returns></returns>
         Protected ReadOnly Property ComObjectType As Type
 
         ''' <summary>
-        ''' Close children and COM object (without suppression of exceptions)
+        ''' Close/quit the application inclusive its children COM objects
         ''' </summary>
-        ''' <remarks>Executes only if not yet closed</remarks>
+        ''' <exception cref="Exception">If actions fail to close the COM object or its children, an exception is thrown</exception>
+        ''' <remarks>Close/dispose actions occur only if not yet closed; identical as calling method Dispose() directly</remarks>
         Protected Sub CloseAndDisposeChildrenAndComObject()
             If Not Me.IsDisposedComObject Then
                 Me.Dispose(True)
             End If
         End Sub
 
+        ''' <summary>
+        ''' Has the COM object already been closed and disposed
+        ''' </summary>
+        ''' <returns></returns>
         Protected ReadOnly Property IsDisposedComObject As Boolean
             Get
                 Return _ComObject Is Nothing
@@ -261,9 +274,10 @@ Namespace CompuMaster.ComInterop
         End Sub
 
         ''' <summary>
-        ''' Close and dispose the COM object and all of its children (if not yet done)
+        ''' Close/quit the application inclusive its children COM objects
         ''' </summary>
-        ''' <remarks>Throws exceptions if closing actions of this object or children objects fail</remarks>
+        ''' <exception cref="Exception">If actions fail to close the COM object or its children, an exception is thrown</exception>
+        ''' <remarks>Close/dispose actions occur only if not yet closed</remarks>
         Public Sub Dispose()
             ' Ändern Sie diesen Code nicht. Fügen Sie Bereinigungscode in der Methode "Dispose(disposing As Boolean)" ein.
             Dispose(disposing:=True)

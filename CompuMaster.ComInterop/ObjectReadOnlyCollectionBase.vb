@@ -20,8 +20,17 @@
             MyBase.New(parentItemResponsibleForDisposal, createdComObjectInstance)
         End Sub
 
+        ''' <summary>
+        ''' The items count
+        ''' </summary>
+        ''' <returns></returns>
         Public MustOverride ReadOnly Property Count As Integer
 
+        ''' <summary>
+        ''' A collection item
+        ''' </summary>
+        ''' <param name="index"></param>
+        ''' <returns></returns>
         Public MustOverride ReadOnly Property Item(index As Integer) As TChildWrapper
 
         'Protected Shared Function CreateChildInstance(parentItemResponsibleForDisposal As TParentWrapper, createdComObjectInstance As TCollectionComObject) As TChildWrapper

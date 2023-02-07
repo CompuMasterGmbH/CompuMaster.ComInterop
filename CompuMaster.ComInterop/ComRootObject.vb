@@ -31,7 +31,7 @@
         End Sub
 
         ''' <summary>
-        ''' Is the COM object closed and disposed
+        ''' Has the COM object already been closed and disposed
         ''' </summary>
         ''' <returns></returns>
         Public ReadOnly Property IsClosed As Boolean
@@ -41,9 +41,10 @@
         End Property
 
         ''' <summary>
-        ''' Close/quit the application
+        ''' Close/quit the application inclusive its children COM objects
         ''' </summary>
-        ''' <remarks>Identical as calling method Dispose() directly</remarks>
+        ''' <exception cref="Exception">If actions fail to close the COM object or its children, an exception is thrown</exception>
+        ''' <remarks>Close/dispose actions occur only if not yet closed; identical as calling method Dispose() directly</remarks>
         Public Sub Close()
             MyBase.CloseAndDisposeChildrenAndComObject()
         End Sub
@@ -58,15 +59,27 @@
             End Get
         End Property
 
+        ''' <summary>
+        ''' Close and dispose commands for children objects
+        ''' </summary>
         Protected Overrides Sub OnDisposeChildren()
         End Sub
 
+        ''' <summary>
+        ''' Required close commands for the COM object like App.Quit() or Document.Close()
+        ''' </summary>
         Protected Overrides Sub OnClosing()
         End Sub
 
+        ''' <summary>
+        ''' Required actions after the COM object has been closed, e.g. removing from a list of open documents
+        ''' </summary>
         Protected Overrides Sub OnClosed()
         End Sub
 
+        ''' <summary>
+        ''' Actions before close and dispose commands for children objects and this object 
+        ''' </summary>
         Protected Overrides Sub OnBeforeClosing()
         End Sub
 

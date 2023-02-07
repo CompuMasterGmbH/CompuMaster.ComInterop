@@ -8,6 +8,10 @@ Namespace CompuMaster.ComInterop
     ''' </summary>
     Public NotInheritable Class ComTools
 
+        ''' <summary>
+        ''' Release a COM object (using System.Runtime.InteropServices.Marshal.ReleaseComObject respectively FinalReleaseComObject)
+        ''' </summary>
+        ''' <param name="obj"></param>
         Public Shared Sub ReleaseComObject(ByVal obj As Object)
             Try
                 If obj IsNot Nothing Then
