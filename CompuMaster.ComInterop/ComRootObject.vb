@@ -8,23 +8,44 @@
         Inherits ComObjectBase
 
         ''' <summary>
-        ''' Create a new COM root object e.g. for Excel.Application
+        ''' Create a new wrapper for a COM root object e.g. for Excel.Application
         ''' </summary>
-        ''' <param name="obj"></param>
+        ''' <param name="obj">The raw COM object</param>
         ''' <param name="onClosingAction">A close action, usually a method call to quit the application</param>
         Public Sub New(obj As TComObject, onClosingAction As OnClosingAction)
             Me.New(obj, Nothing, onClosingAction, Nothing)
         End Sub
 
+        ''' <summary>
+        ''' Create a new wrapper for a COM root object e.g. for Excel.Application
+        ''' </summary>
+        ''' <param name="obj">The raw COM object</param>
+        ''' <param name="onDisposeChildrenAction">Close and dispose commands for children objects</param>
+        ''' <param name="onClosingAction">Required close commands for the COM object like App.Quit() or Document.Close()</param>
+        ''' <param name="onClosedAction">Required actions after the COM object has been closed, e.g. removing from a list of open documents</param>
         Public Sub New(obj As TComObject,
                            onDisposeChildrenAction As OnDisposeChildrenAction, onClosingAction As OnClosingAction, onClosedAction As OnClosedAction)
             MyBase.New(Nothing, obj, onDisposeChildrenAction, onClosingAction, onClosedAction)
         End Sub
 
+        ''' <summary>
+        ''' Create a new wrapper for a COM child object
+        ''' </summary>
+        ''' <param name="parentItemResponsibleForDisposal">A parent item which triggers disposal of this item</param>
+        ''' <param name="obj">The raw COM object</param>
+        ''' <param name="onClosingAction">Required close commands for the COM object like App.Quit() or Document.Close()</param>
         Protected Friend Sub New(parentItemResponsibleForDisposal As Global.CompuMaster.ComInterop.ComObjectBase, obj As TComObject, onClosingAction As OnClosingAction)
             MyBase.New(parentItemResponsibleForDisposal, obj, Nothing, onClosingAction, Nothing)
         End Sub
 
+        ''' <summary>
+        ''' Create a new wrapper for a COM child object
+        ''' </summary>
+        ''' <param name="parentItemResponsibleForDisposal">A parent item which triggers disposal of this item</param>
+        ''' <param name="obj">The raw COM object</param>
+        ''' <param name="onDisposeChildrenAction">Close and dispose commands for children objects</param>
+        ''' <param name="onClosingAction">Required close commands for the COM object like App.Quit() or Document.Close()</param>
+        ''' <param name="onClosedAction">Required actions after the COM object has been closed, e.g. removing from a list of open documents</param>
         Protected Friend Sub New(parentItemResponsibleForDisposal As Global.CompuMaster.ComInterop.ComObjectBase, obj As TComObject,
                            onDisposeChildrenAction As OnDisposeChildrenAction, onClosingAction As OnClosingAction, onClosedAction As OnClosedAction)
             MyBase.New(parentItemResponsibleForDisposal, obj, onDisposeChildrenAction, onClosingAction, onClosedAction)
