@@ -13,6 +13,7 @@
     <PackageTags>COM,Interop,Reflection,microsoft.office.interop.excel,microsoft.office.interop.word,microsoft.office.interop.msproject,microsoft.office.interop.poerpoint,microsoft.office.interop.outlook,microsoft.office.interop.onenote,Microsoft.Office.Excel,Microsoft,Office,Excel,Word,Powerpoint</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/CompuMasterGmbH/CompuMaster.ComInterop/</PackageProjectUrl>
+	<GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
