@@ -146,21 +146,33 @@ Namespace CompuMaster.ComInterop
         Private _OnClosedAction As OnClosedAction
         Public Delegate Sub OnClosedAction(instance As ComObjectBase)
 
+        ''' <summary>
+        ''' Run all code provided for OnDisposeChildren
+        ''' </summary>
         Private Sub _OnDisposeChildren()
-            If _OnDisposeChildrenAction IsNot Nothing Then _OnDisposeChildrenAction(Me)
-            OnDisposeChildren()
+            If _OnDisposeChildrenAction IsNot Nothing Then _OnDisposeChildrenAction(Me) 'run delegated method (if provided)
+            OnDisposeChildren() 'run override-method
         End Sub
 
+        ''' <summary>
+        ''' Run all code provided for OnClosing, e.g. a quit command
+        ''' </summary>
         Private Sub _OnClosing()
-            If _OnClosingAction IsNot Nothing Then _OnClosingAction(Me)
-            OnClosing()
+            If _OnClosingAction IsNot Nothing Then _OnClosingAction(Me) 'run delegated method (if provided)
+            OnClosing() 'run override-method
         End Sub
 
+        ''' <summary>
+        ''' Run all code provided for OnClosed, e.g. cleanup of collections or caches referencing this object
+        ''' </summary>
         Private Sub _OnClosed()
-            If _OnClosedAction IsNot Nothing Then _OnClosedAction(Me)
-            OnClosed()
+            If _OnClosedAction IsNot Nothing Then _OnClosedAction(Me) 'run delegated method (if provided)
+            OnClosed() 'run override-method
         End Sub
 
+        ''' <summary>
+        ''' Run close and dispose for all children objects
+        ''' </summary>
         Private Sub DisposeRegisteredComChildren()
             For MyCounter As Integer = 0 To Me.RegisteredComChildren.Count - 1
                 Me.RegisteredComChildren(MyCounter).Dispose()
@@ -175,6 +187,10 @@ Namespace CompuMaster.ComInterop
         ''' </summary>
         Protected IgnoreMissingMethodExceptionsOnFinalize As Boolean = True
 
+        ''' <summary>
+        ''' Close and dispose the COM object and all of its children (if not yet done)
+        ''' </summary>
+        ''' <param name="disposing">True if called by method Dispose, False if called by method Finalize</param>
         Protected Overridable Sub Dispose(disposing As Boolean)
             If Not disposedValue Then
                 If _ComObject IsNot Nothing Then
@@ -233,6 +249,10 @@ Namespace CompuMaster.ComInterop
             MyBase.Finalize()
         End Sub
 
+        ''' <summary>
+        ''' Garbage collector edition: close and dispose the COM object and all of its children (if not yet done)
+        ''' </summary>
+        ''' <remarks>If <see cref="IgnoreMissingMethodExceptionsOnFinalize"/> is true, suppress exceptions if closing actions of this object or children objects fail</remarks>
         Private Sub IDisposable_Dispose() Implements IDisposable.Dispose
             ' Ändern Sie diesen Code nicht. Fügen Sie Bereinigungscode in der Methode "Dispose(disposing As Boolean)" ein.
             isGC = True
@@ -240,6 +260,10 @@ Namespace CompuMaster.ComInterop
             GC.SuppressFinalize(Me)
         End Sub
 
+        ''' <summary>
+        ''' Close and dispose the COM object and all of its children (if not yet done)
+        ''' </summary>
+        ''' <remarks>Throws exceptions if closing actions of this object or children objects fail</remarks>
         Public Sub Dispose()
             ' Ändern Sie diesen Code nicht. Fügen Sie Bereinigungscode in der Methode "Dispose(disposing As Boolean)" ein.
             Dispose(disposing:=True)

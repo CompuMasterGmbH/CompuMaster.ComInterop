@@ -22,6 +22,10 @@
             MyBase.New(parentItemResponsibleForDisposal, obj, onDisposeChildrenAction, onClosingAction, onClosedAction)
         End Sub
 
+        ''' <summary>
+        ''' The parent wrapper object
+        ''' </summary>
+        ''' <returns></returns>
         Public ReadOnly Property Parent As TParentWrapper
 
     End Class
