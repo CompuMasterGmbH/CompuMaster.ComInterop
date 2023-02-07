@@ -42,9 +42,7 @@ Namespace CompuMaster.ComInterop
         ''' <exception cref="Exception">If actions fail to close the COM object or its children, an exception is thrown</exception>
         ''' <remarks>Close/dispose actions occur only if not yet closed; identical as calling method Dispose() directly</remarks>
         Protected Sub CloseAndDisposeChildrenAndComObject()
-            If Not Me.IsDisposedComObject Then
-                Me.Dispose(True)
-            End If
+            Me.Dispose(True)
         End Sub
 
         ''' <summary>
