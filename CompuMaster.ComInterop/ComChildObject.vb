@@ -39,6 +39,7 @@
         Public Sub New(parentItem As ComObjectBase, obj As TComObject,
                    onDisposeChildrenAction As OnDisposeChildrenAction, onClosingAction As OnClosingAction, onClosedAction As OnClosedAction)
             MyBase.New(parentItem, obj, onDisposeChildrenAction, onClosingAction, onClosedAction)
+            Me.Parent = CType(parentItem, TParentWrapper)
         End Sub
 
         ''' <summary>
