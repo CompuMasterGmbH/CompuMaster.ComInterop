@@ -1,4 +1,4 @@
-﻿Public Class Tools
+﻿Public Class ExcelProcessTools
 
     Public Shared Function ExcelProcesses() As Process()
         Return System.Diagnostics.Process.GetProcessesByName("Excel")
@@ -10,24 +10,24 @@
         GC.WaitForPendingFinalizers()
 
         'Wait for Excel to close - max 3 seconds
-        WaitUntilTrueOrTimeout(Function() Tools.ExcelProcesses.Length = 0, New TimeSpan(0, 0, 3))
+        WaitUntilTrueOrTimeout(Function() ExcelProcessTools.ExcelProcesses.Length = 0, New TimeSpan(0, 0, 3))
 
         'Close processes
-        Dim FoundExcelProcesses As Process() = Tools.ExcelProcesses
+        Dim FoundExcelProcesses As Process() = ExcelProcessTools.ExcelProcesses
         For Each p In FoundExcelProcesses
             p.Close()
         Next
 
         If forceKill Then
             'Kill processes
-            FoundExcelProcesses = Tools.ExcelProcesses
+            FoundExcelProcesses = ExcelProcessTools.ExcelProcesses
             For Each p In FoundExcelProcesses
                 p.Kill()
             Next
         End If
 
         'Wait for Excel to close - max 5 seconds
-        WaitUntilTrueOrTimeout(Function() Tools.ExcelProcesses.Length = 0, New TimeSpan(0, 0, 5))
+        WaitUntilTrueOrTimeout(Function() ExcelProcessTools.ExcelProcesses.Length = 0, New TimeSpan(0, 0, 5))
     End Sub
 
     Public Delegate Function WaitUntilTrueConditionTest() As Boolean

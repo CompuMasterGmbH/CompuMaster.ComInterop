@@ -23,6 +23,21 @@
     </PackageReference>
   </ItemGroup>
 
+	<ItemGroup>
+		<Reference Include="Microsoft.Bcl.AsyncInterfaces">
+			<HintPath>libs-NonWindowsPlatforms\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+		</Reference>
+		<Reference Include="Microsoft.Office.Interop.Excel">
+			<HintPath>libs-NonWindowsPlatforms\Microsoft.Office.Interop.Excel.dll</HintPath>
+		</Reference>
+		<Reference Include="Microsoft.Vbe.Interop">
+			<HintPath>libs-NonWindowsPlatforms\Microsoft.Vbe.Interop.dll</HintPath>
+		</Reference>
+		<Reference Include="office">
+			<HintPath>libs-NonWindowsPlatforms\OFFICE.DLL</HintPath>
+		</Reference>
+	</ItemGroup>
+	
   <ItemGroup>
     <ProjectReference Include="..\CompuMaster.ComInterop\CompuMaster.ComInterop.vbproj" />
   </ItemGroup>
