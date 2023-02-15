@@ -31,6 +31,7 @@ Namespace CompuMaster.ComInterop
         ''' Run a forced garbage collection and wait for pending finalizers
         ''' </summary>
         Public Shared Sub GarbageCollectAndWaitForPendingFinalizers()
+            GC.Collect(0, GCCollectionMode.Forced, True)
             GC.Collect(2, GCCollectionMode.Forced, True)
             GC.WaitForPendingFinalizers()
         End Sub
