@@ -6,8 +6,7 @@
 
     Public Shared Sub KillAllExcelProcesses(Optional forceKill As Boolean = False)
         'Close by gargabe collector
-        GC.Collect(2, GCCollectionMode.Forced)
-        GC.WaitForPendingFinalizers()
+        CompuMaster.ComInterop.ComTools.GarbageCollectAndWaitForPendingFinalizers()
 
         'Wait for Excel to close - max 3 seconds
         WaitUntilTrueOrTimeout(Function() ExcelProcessTools.ExcelProcesses.Length = 0, New TimeSpan(0, 0, 3))

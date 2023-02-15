@@ -23,8 +23,7 @@ Public MustInherit Class MsExcelTestBase
 
     <TearDown>
     Public Sub TearDown()
-        GC.Collect(2, GCCollectionMode.Forced)
-        GC.WaitForPendingFinalizers()
+        CompuMaster.ComInterop.ComTools.GarbageCollectAndWaitForPendingFinalizers()
         ExcelProcessTools.KillAllExcelProcesses() 'Kill all left-overs
     End Sub
 
