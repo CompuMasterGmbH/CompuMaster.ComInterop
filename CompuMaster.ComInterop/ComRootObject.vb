@@ -66,7 +66,7 @@
         ''' </summary>
         ''' <exception cref="Exception">If actions fail to close the COM object or its children, an exception is thrown</exception>
         ''' <remarks>Close/dispose actions occur only if not yet closed; identical as calling method Dispose() directly</remarks>
-        Public Sub Close()
+        Public Overridable Sub Close()
             MyBase.CloseAndDisposeChildrenAndComObject()
         End Sub
 
