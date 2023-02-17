@@ -171,3 +171,41 @@ Usualy requires you to implement
   * Required close commands for the COM object like App.Quit() or Document.Close()
 * `OnClosed()`
   * Required actions after the COM object has been closed, e.g. removing from a list of open documents
+
+## Examples
+
+### COM application wrapper for Microsoft Excel Interop
+
+```C#
+//An application wrapper class for safe COM object handling and release for COM servers, 
+//properly releasing the COM object
+//forcefully killing the application process on end if required
+var ExcelEngine = new CompuMaster.ComInterop.ComApplication<Microsoft.Office.Interop.Excel.Application>(
+    new Microsoft.Office.Interop.Excel.Application,
+    (x) => x.ComObjectStronglyTyped.Hwnd,
+    (x) => x.ComObjectStronglyTyped.Quit(),
+    "EXCEL");
+
+//do some nice things...
+
+//quit (if you don't run Dispose method manually here, the garbage collector will do the job automatically to the given time)
+ExcelEngine.Dispose();
+```
+
+### COM application wrapper for Microsoft Excel completely without Interop assemblies/classes
+
+```C#
+//An application wrapper class for safe COM object handling and release for COM servers, 
+//forcefully killing the application process on end if required
+var ExcelEngine = new CompuMaster.ComInterop.ComApplication<Object>(
+    "Excel.Application",
+    (x) => x.InvokePropertyGet<Int32>("Hwnd"),
+    (x) => x.InvokeMethod("Quit"),
+    "EXCEL");
+
+//do some nice things...
+
+//quit (if you don't run Dispose method manually here, the garbage collector will do the job automatically to the given time)
+ExcelEngine.Dispose();
+```
+
