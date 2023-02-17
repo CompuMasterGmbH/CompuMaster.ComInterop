@@ -50,7 +50,9 @@ Namespace CompuMaster.ComInterop
         ''' <param name="hwndOfComApplicationInstanceAction">The window handle (typically the hwnd property) of a COM server application which is used to identify the correct process on local machine</param>
         ''' <param name="expectedProcessName">The process name which is used as filter before comparing process IDs to lookup the correct process</param>
         Public Sub New(comApplicationInstance As TComApplication, hwndOfComApplicationInstanceAction As HwndOfComApplicationInstanceAction, onClosingAction As OnApplicationClosingAction, expectedProcessName As String)
-            MyBase.New(comApplicationInstance, Sub(a) onClosingAction(CType(a, ComApplication(Of TComApplication))))
+            MyBase.New(comApplicationInstance, Sub(comWrapper) CallOnClosingAction(comWrapper, onClosingAction))
+            If hwndOfComApplicationInstanceAction Is Nothing Then Throw New ArgumentNullException(NameOf(hwndOfComApplicationInstanceAction))
+            If expectedProcessName Is Nothing Then Throw New ArgumentNullException(NameOf(expectedProcessName))
             Me.ExpectedProcessName = expectedProcessName
             Try
                 Dim ExcelProcessID As Integer = Nothing
@@ -60,13 +62,21 @@ Namespace CompuMaster.ComInterop
             End Try
         End Sub
 
+        Private Shared Sub CallOnClosingAction(comWrapper As ComObjectBase, onClosingAction As OnApplicationClosingAction)
+            If onClosingAction IsNot Nothing Then
+                onClosingAction(CType(comWrapper, ComApplication(Of TComApplication)))
+            End If
+        End Sub
+
 #If NETFRAMEWORK Or NETCOREAPP Then
         Public Sub New(comApplicationName As String, hwndOfComApplicationInstanceAction As HwndOfComApplicationInstanceAction, expectedProcessName As String)
             Me.New(comApplicationName, hwndOfComApplicationInstanceAction, Nothing, expectedProcessName)
         End Sub
 
         Public Sub New(comApplicationName As String, hwndOfComApplicationInstanceAction As HwndOfComApplicationInstanceAction, onClosingAction As OnApplicationClosingAction, expectedProcessName As String)
-            MyBase.New(CType(ComTools.CreateComApplication(comApplicationName), TComApplication), Sub(a) onClosingAction(CType(a, ComApplication(Of TComApplication))))
+            MyBase.New(CType(ComTools.CreateComApplication(comApplicationName), TComApplication), Sub(comWrapper) CallOnClosingAction(comWrapper, onClosingAction))
+            If hwndOfComApplicationInstanceAction Is Nothing Then Throw New ArgumentNullException(NameOf(hwndOfComApplicationInstanceAction))
+            If expectedProcessName Is Nothing Then Throw New ArgumentNullException(NameOf(expectedProcessName))
             Me.ExpectedProcessName = expectedProcessName
             Try
                 Dim ExcelProcessID As Integer = Nothing
