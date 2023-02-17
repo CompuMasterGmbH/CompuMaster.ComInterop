@@ -54,7 +54,7 @@ Public Class ComApplicationInstancingTest
     End Sub
 
     <Test> Public Sub TestJitExcelAppByName()
-        Dim E As New CompuMaster.ComInterop.ComApplicationBase(Of Object)(
+        Dim E As New CompuMaster.ComInterop.ComApplication(Of Object)(
             "Excel.Application",
             Function(x) x.InvokePropertyGet(Of Integer)("Hwnd"),
             Sub(x) x.InvokeMethod("Quit"),
