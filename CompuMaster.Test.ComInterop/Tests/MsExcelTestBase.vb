@@ -38,7 +38,9 @@ Public MustInherit Class MsExcelTestBase
         Else
             'Windows platform ok - MS Excel installed?
             Try
+#Disable Warning CA1416
                 Dim MsExcelType As Type = Type.GetTypeFromProgID("Excel.Application")
+#Enable Warning CA1416
                 Assert.IsNotNull(MsExcelType)
             Catch ex As Exception
                 Assert.Ignore("MS Excel not installed: " & ex.Message)

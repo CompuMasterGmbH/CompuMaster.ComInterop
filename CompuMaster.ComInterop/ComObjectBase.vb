@@ -149,12 +149,24 @@ Namespace CompuMaster.ComInterop
         Protected MustOverride Sub OnClosed()
 
         Private _OnDisposeChildrenAction As OnDisposeChildrenAction
+        ''' <summary>
+        ''' Run all code provided for OnDisposeChildren
+        ''' </summary>
+        ''' <param name="instance"></param>
         Public Delegate Sub OnDisposeChildrenAction(instance As ComObjectBase)
 
         Private _OnClosingAction As OnClosingAction
+        ''' <summary>
+        ''' Run all code provided for OnClosing, e.g. a quit command
+        ''' </summary>
+        ''' <param name="instance"></param>
         Public Delegate Sub OnClosingAction(instance As ComObjectBase)
 
         Private _OnClosedAction As OnClosedAction
+        ''' <summary>
+        ''' Run all code provided for OnClosed, e.g. cleanup of collections or caches referencing this object
+        ''' </summary>
+        ''' <param name="instance"></param>
         Public Delegate Sub OnClosedAction(instance As ComObjectBase)
 
         ''' <summary>
