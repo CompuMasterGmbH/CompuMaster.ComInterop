@@ -9,11 +9,14 @@
     <OptionStrict>On</OptionStrict>
     <Description>Safe design pattern for creating and closing COM interop instances + support e.g. MS Office/Excel/Word/Powerpoint Interop without Microsoft's interop assemblies + access to COM object's public members with Reflection (instead of late binding (which often fails))</Description>
     <PackageIcon>logo_64x64.png</PackageIcon>
-    <RepositoryUrl>https://github.com/CompuMasterGmbH/CompuMaster.ComInterop/</RepositoryUrl>
+    <RepositoryUrl>https://github.com/CompuMasterGmbH/CompuMaster.ComInterop.git</RepositoryUrl>
     <PackageTags>COM,Interop,Reflection,microsoft.office.interop.excel,microsoft.office.interop.word,microsoft.office.interop.msproject,microsoft.office.interop.poerpoint,microsoft.office.interop.outlook,microsoft.office.interop.onenote,Microsoft.Office.Excel,Microsoft,Office,Excel,Word,Powerpoint</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/CompuMasterGmbH/CompuMaster.ComInterop/</PackageProjectUrl>
 	<GenerateDocumentationFile>true</GenerateDocumentationFile>
+	<RepositoryType>git</RepositoryType>
+	<IncludeSymbols>True</IncludeSymbols>
+	<SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
   <ItemGroup>
