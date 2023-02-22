@@ -56,38 +56,93 @@ Namespace CompuMaster.ComInterop
         End Property
 
 #Region "Invoke methods"
+        ''' <summary>
+        ''' Invoke function member
+        ''' </summary>
+        ''' <typeparam name="T"></typeparam>
+        ''' <param name="name"></param>
+        ''' <param name="values">Arguments for the called member, remember to use System.Reflection.Missing.Value where required</param>
+        ''' <returns></returns>
         Public Function InvokeFunction(Of T)(name As String, ParamArray values As Object()) As T
             Return CompuMaster.Reflection.PublicInstanceMembers.InvokeFunction(Of T)(_ComObject, ComObjectType, name, values)
         End Function
 
+        ''' <summary>
+        ''' Invoke method member
+        ''' </summary>
+        ''' <param name="name"></param>
+        ''' <param name="values">Arguments for the called member, remember to use System.Reflection.Missing.Value where required</param>
         Public Sub InvokeMethod(name As String, ParamArray values As Object())
             CompuMaster.Reflection.PublicInstanceMembers.InvokeMethod(_ComObject, ComObjectType, name, values)
         End Sub
 
+        ''' <summary>
+        ''' Invoke property-get member
+        ''' </summary>
+        ''' <typeparam name="T"></typeparam>
+        ''' <param name="name"></param>
+        ''' <returns></returns>
         Public Function InvokePropertyGet(Of T)(name As String) As T
             Return CompuMaster.Reflection.PublicInstanceMembers.InvokePropertyGet(Of T)(_ComObject, ComObjectType, name)
         End Function
 
+        ''' <summary>
+        ''' Invoke property-get member
+        ''' </summary>
+        ''' <typeparam name="T"></typeparam>
+        ''' <param name="name"></param>
+        ''' <param name="propertyArrayItem">Arguments for the called member, remember to use System.Reflection.Missing.Value where required</param>
+        ''' <returns></returns>
         Public Function InvokePropertyGet(Of T)(name As String, propertyArrayItem As Object) As T
             Return CompuMaster.Reflection.PublicInstanceMembers.InvokePropertyGet(Of T)(_ComObject, ComObjectType, name, propertyArrayItem)
         End Function
 
+        ''' <summary>
+        ''' Invoke property-set member
+        ''' </summary>
+        ''' <typeparam name="T"></typeparam>
+        ''' <param name="name"></param>
+        ''' <param name="value"></param>
         Public Sub InvokePropertySet(Of T)(name As String, value As T)
             CompuMaster.Reflection.PublicInstanceMembers.InvokePropertySet(Of T)(_ComObject, ComObjectType, name, value)
         End Sub
 
+        ''' <summary>
+        ''' Invoke property-set member
+        ''' </summary>
+        ''' <typeparam name="T"></typeparam>
+        ''' <param name="name"></param>
+        ''' <param name="values">Arguments for the called member, remember to use System.Reflection.Missing.Value where required</param>
         Public Sub InvokePropertySet(Of T)(name As String, values As T())
             CompuMaster.Reflection.PublicInstanceMembers.InvokePropertySet(Of T)(_ComObject, ComObjectType, name, values)
         End Sub
 
+        ''' <summary>
+        ''' Invoke field-get member
+        ''' </summary>
+        ''' <typeparam name="T"></typeparam>
+        ''' <param name="name"></param>
+        ''' <returns></returns>
         Public Function InvokeFieldGet(Of T)(name As String) As T
             Return CompuMaster.Reflection.PublicInstanceMembers.InvokeFieldGet(Of T)(_ComObject, ComObjectType, name)
         End Function
 
+        ''' <summary>
+        ''' Invoke field-set member
+        ''' </summary>
+        ''' <typeparam name="T"></typeparam>
+        ''' <param name="name"></param>
+        ''' <param name="value"></param>
         Public Sub InvokeFieldSet(Of T)(name As String, value As T)
             CompuMaster.Reflection.PublicInstanceMembers.InvokeFieldSet(Of T)(_ComObject, ComObjectType, name, value)
         End Sub
 
+        ''' <summary>
+        ''' Invoke field-set member
+        ''' </summary>
+        ''' <typeparam name="T"></typeparam>
+        ''' <param name="name"></param>
+        ''' <param name="values"></param>
         Public Sub InvokeFieldSet(Of T)(name As String, values As T())
             CompuMaster.Reflection.PublicInstanceMembers.InvokeFieldSet(Of T)(_ComObject, ComObjectType, name, values)
         End Sub
