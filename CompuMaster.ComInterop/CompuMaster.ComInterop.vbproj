@@ -2,9 +2,9 @@
 
   <PropertyGroup>
     <RootNamespace></RootNamespace>
-    <TargetFrameworks>netstandard2.1;net48;netcoreapp3.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.1;net48;net8;netcoreapp3.0</TargetFrameworks>
     <Company>CompuMaster GmbH</Company>
-    <Copyright>2023 CompuMaster GmbH</Copyright>
+    <Copyright>2023-2024 CompuMaster GmbH</Copyright>
     <Title>CompuMaster.ComInterop</Title>
     <OptionStrict>On</OptionStrict>
     <Description>Safe design pattern for creating and closing COM interop instances + support e.g. MS Office/Excel/Word/Powerpoint Interop without Microsoft's interop assemblies + access to COM object's public members with Reflection (instead of late binding (which often fails))</Description>
