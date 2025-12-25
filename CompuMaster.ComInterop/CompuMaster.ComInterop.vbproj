@@ -4,7 +4,7 @@
     <RootNamespace></RootNamespace>
     <TargetFrameworks>netstandard2.1;net48;net8;netcoreapp3.0</TargetFrameworks>
     <Company>CompuMaster GmbH</Company>
-    <Copyright>2023-2024 CompuMaster GmbH</Copyright>
+    <Copyright>2023-2025 CompuMaster GmbH</Copyright>
     <Version>1.0.2025.1225</Version>
     <Title>CompuMaster.ComInterop</Title>
     <OptionStrict>On</OptionStrict>
