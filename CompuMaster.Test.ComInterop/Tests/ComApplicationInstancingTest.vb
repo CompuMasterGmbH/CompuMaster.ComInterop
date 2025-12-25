@@ -8,7 +8,7 @@ Public Class ComApplicationInstancingTest
 
         Public Sub New()
             MyBase.New("Excel.Application",
-                       Function(x) x.InvokePropertyGet(Of Integer)("Hwnd"),
+                       Function(x) New IntPtr(x.InvokePropertyGet(Of Integer)("Hwnd")),
                        Sub(x) x.InvokeMethod("Quit"),
                        "EXCEL")
         End Sub
@@ -20,7 +20,7 @@ Public Class ComApplicationInstancingTest
 
         Public Sub New()
             MyBase.New(New Microsoft.Office.Interop.Excel.Application,
-                       Function(x) x.ComObjectStronglyTyped.Hwnd,
+                       Function(x) New IntPtr(x.ComObjectStronglyTyped.Hwnd),
                        Sub(x) x.ComObjectStronglyTyped.Quit(),
                        "EXCEL")
         End Sub
@@ -56,7 +56,7 @@ Public Class ComApplicationInstancingTest
     <Test> Public Sub TestJitExcelAppByName()
         Dim E As New CompuMaster.ComInterop.ComApplication(Of Object)(
             "Excel.Application",
-            Function(x) x.InvokePropertyGet(Of Integer)("Hwnd"),
+            Function(x) New IntPtr(x.InvokePropertyGet(Of Integer)("Hwnd")),
             Sub(x) x.InvokeMethod("Quit"),
             "EXCEL")
         Assert.AreEqual("Microsoft Excel", E.InvokePropertyGet(Of String)("Name"))
@@ -67,7 +67,7 @@ Public Class ComApplicationInstancingTest
     <Test> Public Sub TestJitExcelAppByInteropClass()
         Dim E As New CompuMaster.ComInterop.ComApplication(Of Microsoft.Office.Interop.Excel.Application)(
             New Microsoft.Office.Interop.Excel.Application,
-            Function(x) x.ComObjectStronglyTyped.Hwnd,
+            Function(x) New IntPtr(x.ComObjectStronglyTyped.Hwnd),
             Sub(x) x.ComObjectStronglyTyped.Quit(),
             "EXCEL")
         Assert.AreEqual("Microsoft Excel", E.ComObjectStronglyTyped.Name)

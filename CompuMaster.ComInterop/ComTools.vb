@@ -127,7 +127,7 @@ Namespace CompuMaster.ComInterop
             Return False
         End Function
 
-        Friend Declare Auto Function GetWindowThreadProcessId Lib "user32.dll" (ByVal hwnd As Integer, ByRef lpdwProcessId As Integer) As Integer
+        Friend Declare Auto Function GetWindowThreadProcessId Lib "user32.dll" (ByVal hwnd As IntPtr, ByRef lpdwProcessId As UInteger) As UInteger
 
     End Class
 

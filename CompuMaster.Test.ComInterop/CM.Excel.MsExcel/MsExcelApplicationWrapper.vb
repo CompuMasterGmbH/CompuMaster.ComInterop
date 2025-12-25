@@ -15,7 +15,7 @@ Namespace Global.CompuMaster.Excel.MsExcelCom
         ''' Create a new MS Excel instance within its wrapper instance
         ''' </summary>
         Public Sub New()
-            MyBase.New(CreateMsExcelApplication, Function(x) x.ComObjectStronglyTyped.Hwnd, ExpectedProcessName)
+            MyBase.New(CreateMsExcelApplication, Function(x) New IntPtr(x.ComObjectStronglyTyped.Hwnd), ExpectedProcessName)
             Me.ComObjectStronglyTyped.Visible = False
             Me.ComObjectStronglyTyped.Interactive = False
             Me.ComObjectStronglyTyped.ScreenUpdating = False

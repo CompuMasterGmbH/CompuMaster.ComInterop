@@ -25,7 +25,7 @@ Namespace CompuMaster.ComInterop
         ''' The window handle (typically the hwnd property) of a COM server application which is used to identify the correct process on local machine
         ''' </summary>
         ''' <returns></returns>
-        Public Delegate Function HwndOfComApplicationInstanceAction(comApplicationObject As ComApplication(Of TComApplication)) As Integer
+        Public Delegate Function HwndOfComApplicationInstanceAction(comApplicationObject As ComApplication(Of TComApplication)) As IntPtr
 
         ''' <summary>
         ''' Run all code provided for OnClosing, e.g. a quit command
@@ -55,9 +55,12 @@ Namespace CompuMaster.ComInterop
             If expectedProcessName Is Nothing Then Throw New ArgumentNullException(NameOf(expectedProcessName))
             Me.ExpectedProcessName = expectedProcessName
             Try
-                Dim ExcelProcessID As Integer = Nothing
-                ComTools.GetWindowThreadProcessId(hwndOfComApplicationInstanceAction(Me), ExcelProcessID)
-                Me.ProcessId = ExcelProcessID
+                Dim ExcelProcessID As UInteger = 0UI
+                Dim ThreadID As UInteger = ComTools.GetWindowThreadProcessId(hwndOfComApplicationInstanceAction(Me), ExcelProcessID)
+                If ThreadID = 0UI OrElse ExcelProcessID = 0UI Then
+                    Throw New ComponentModel.Win32Exception(Runtime.InteropServices.Marshal.GetLastWin32Error(), "GetWindowThreadProcessId failed for Excel window.")
+                End If
+                Me.ProcessId = CInt(ExcelProcessID)
             Catch
             End Try
         End Sub
@@ -79,9 +82,12 @@ Namespace CompuMaster.ComInterop
             If expectedProcessName Is Nothing Then Throw New ArgumentNullException(NameOf(expectedProcessName))
             Me.ExpectedProcessName = expectedProcessName
             Try
-                Dim ExcelProcessID As Integer = Nothing
-                ComTools.GetWindowThreadProcessId(hwndOfComApplicationInstanceAction(Me), ExcelProcessID)
-                Me.ProcessId = ExcelProcessID
+                Dim ExcelProcessID As UInteger = 0UI
+                Dim ThreadID As UInteger = ComTools.GetWindowThreadProcessId(hwndOfComApplicationInstanceAction(Me), ExcelProcessID)
+                If ThreadID = 0UI OrElse ExcelProcessID = 0UI Then
+                    Throw New ComponentModel.Win32Exception(Runtime.InteropServices.Marshal.GetLastWin32Error(), "GetWindowThreadProcessId failed for Excel window.")
+                End If
+                Me.ProcessId = CInt(ExcelProcessID)
             Catch
             End Try
         End Sub
