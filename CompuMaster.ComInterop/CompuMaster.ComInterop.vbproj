@@ -5,7 +5,7 @@
     <TargetFrameworks>netstandard2.1;net48;net8;netcoreapp3.0</TargetFrameworks>
     <Company>CompuMaster GmbH</Company>
     <Copyright>2023-2025 CompuMaster GmbH</Copyright>
-    <Version>1.0.2025.1225</Version>
+    <Version>1.0.2025.1226</Version>
     <Title>CompuMaster.ComInterop</Title>
     <OptionStrict>On</OptionStrict>
     <Description>Safe design pattern for creating and closing COM interop instances + support e.g. MS Office/Excel/Word/Powerpoint Interop without Microsoft's interop assemblies + access to COM object's public members with Reflection (instead of late binding (which often fails))</Description>
