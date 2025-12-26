@@ -54,15 +54,7 @@ Namespace CompuMaster.ComInterop
             If hwndOfComApplicationInstanceAction Is Nothing Then Throw New ArgumentNullException(NameOf(hwndOfComApplicationInstanceAction))
             If expectedProcessName Is Nothing Then Throw New ArgumentNullException(NameOf(expectedProcessName))
             Me.ExpectedProcessName = expectedProcessName
-            Try
-                Dim ExcelProcessID As UInteger = 0UI
-                Dim ThreadID As UInteger = ComTools.GetWindowThreadProcessId(hwndOfComApplicationInstanceAction(Me), ExcelProcessID)
-                If ThreadID = 0UI OrElse ExcelProcessID = 0UI Then
-                    Throw New ComponentModel.Win32Exception(Runtime.InteropServices.Marshal.GetLastWin32Error(), "GetWindowThreadProcessId failed for Excel window.")
-                End If
-                Me.ProcessId = CInt(ExcelProcessID)
-            Catch
-            End Try
+            Me.ProcessId = ComTools.LookupProcessID(hwndOfComApplicationInstanceAction(Me))
         End Sub
 
         Private Shared Sub CallOnClosingAction(comWrapper As ComObjectBase, onClosingAction As OnApplicationClosingAction)
@@ -81,15 +73,7 @@ Namespace CompuMaster.ComInterop
             If hwndOfComApplicationInstanceAction Is Nothing Then Throw New ArgumentNullException(NameOf(hwndOfComApplicationInstanceAction))
             If expectedProcessName Is Nothing Then Throw New ArgumentNullException(NameOf(expectedProcessName))
             Me.ExpectedProcessName = expectedProcessName
-            Try
-                Dim ExcelProcessID As UInteger = 0UI
-                Dim ThreadID As UInteger = ComTools.GetWindowThreadProcessId(hwndOfComApplicationInstanceAction(Me), ExcelProcessID)
-                If ThreadID = 0UI OrElse ExcelProcessID = 0UI Then
-                    Throw New ComponentModel.Win32Exception(Runtime.InteropServices.Marshal.GetLastWin32Error(), "GetWindowThreadProcessId failed for Excel window.")
-                End If
-                Me.ProcessId = CInt(ExcelProcessID)
-            Catch
-            End Try
+            Me.ProcessId = ComTools.LookupProcessID(hwndOfComApplicationInstanceAction(Me))
         End Sub
 #End If
 
@@ -173,6 +157,19 @@ Namespace CompuMaster.ComInterop
                 End Try
             End If
         End Sub
+
+        Public Overrides Function ToString() As String
+            If Me.ProcessId <> 0 Then
+                Dim MyProcess = Me.Process
+                If MyProcess IsNot Nothing Then
+                    Return NameOf(ComApplication(Of TComApplication)) & ", process ID " & Me.ProcessId & ", " & MyProcess.ProcessName
+                Else
+                    Return NameOf(ComApplication(Of TComApplication)) & ", process ID " & Me.ProcessId
+                End If
+            Else
+                Return NameOf(ComApplication(Of TComApplication)) & ", no local process available"
+            End If
+        End Function
 
     End Class
 

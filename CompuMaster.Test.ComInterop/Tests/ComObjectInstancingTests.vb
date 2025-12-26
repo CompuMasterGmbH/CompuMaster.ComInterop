@@ -1,6 +1,7 @@
+Imports CompuMaster.ComInterop
 Imports NUnit.Framework
 
-<NonParallelizable>
+<Parallelizable>
 Public Class ComObjectInstancingTests
     Inherits MsExcelTestBase
 
@@ -32,53 +33,67 @@ Public Class ComObjectInstancingTests
 
     <Test>
     Public Sub ExcelProcessesStartedAndClosed()
-        Assert.AreEqual(0, ExcelProcessTools.ExcelProcesses.Length, "Tests can't be executed while Excel processes are started on this machine")
+        'Assert.AreEqual(0, ExcelProcessTools.ExcelProcesses.Length, "Tests can't be executed while Excel processes are started on this machine")
 
         Dim TestClassForExcelApp As TestClassForExcelApp = CreateExcelAppViaCom()
-        Assert.AreEqual(1, ExcelProcessTools.ExcelProcesses.Length, "Tests can't be executed while Excel processes are started on this machine")
+        ExcelProcessTools.AssertValidOpenedProcess(TestClassForExcelApp.ProcessID)
+        'Assert.AreEqual(1, ExcelProcessTools.ExcelProcesses.Length, "Tests can't be executed while Excel processes are started on this machine")
 
         TestClassForExcelApp.Close()
-        ExcelProcessTools.WaitUntilTrueOrTimeout(Function() ExcelProcessTools.ExcelProcesses.Length = 0, New TimeSpan(0, 0, 15))
-        Assert.AreEqual(0, ExcelProcessTools.ExcelProcesses.Length, "Excel-COM closed, but still " & ExcelProcessTools.ExcelProcesses.Length & " Excel processes running on this machine")
+        ExcelProcessTools.WaitUntilTrueOrTimeout(Function() ExcelProcessTools.ProcessIdExists(TestClassForExcelApp.ProcessID) = False, New TimeSpan(0, 0, 15))
+        ExcelProcessTools.AssertValidClosedProcess(TestClassForExcelApp.ProcessID)
+        'Assert.AreEqual(0, ExcelProcessTools.ExcelProcesses.Length, "Excel-COM closed, but still " & ExcelProcessTools.ExcelProcesses.Length & " Excel processes running on this machine")
 
         TestClassForExcelApp.Close()
-        Assert.AreEqual(0, ExcelProcessTools.ExcelProcesses.Length, "Closing an Excel-COM for the 2nd time still doesn't change anything")
+        ExcelProcessTools.AssertValidClosedProcess(TestClassForExcelApp.ProcessID)
+        'Assert.AreEqual(0, ExcelProcessTools.ExcelProcesses.Length, "Closing an Excel-COM for the 2nd time still doesn't change anything")
 
 #Disable Warning CA1416
         Dim JitExcelApp As New Global.CompuMaster.ComInterop.ComRootObject(Of Object)(CreateObject("Excel.Application"), Sub(instance) instance.InvokeMethod("Quit"))
 #Enable Warning CA1416
-        Assert.AreEqual(1, ExcelProcessTools.ExcelProcesses.Length, "Tests can't be executed while Excel processes are started on this machine")
+        Dim JitExcelAppExcelAppHwnd = JitExcelApp.InvokePropertyGet(Of Integer)("Hwnd")
+        Dim JitExcelAppProcessID = ComTools.LookupProcessID(JitExcelAppExcelAppHwnd)
+        ExcelProcessTools.AssertValidOpenedProcess(JitExcelAppProcessID)
+        'Assert.AreEqual(1, ExcelProcessTools.ExcelProcesses.Length, "Tests can't be executed while Excel processes are started on this machine")
+
         JitExcelApp.Close()
-        ExcelProcessTools.WaitUntilTrueOrTimeout(Function() ExcelProcessTools.ExcelProcesses.Length = 0, New TimeSpan(0, 0, 15))
-        Assert.AreEqual(0, ExcelProcessTools.ExcelProcesses.Length, "Excel-COM closed, but still " & ExcelProcessTools.ExcelProcesses.Length & " Excel processes running on this machine")
+        ExcelProcessTools.WaitUntilTrueOrTimeout(Function() ExcelProcessTools.ProcessIdExists(JitExcelAppProcessID) = False, New TimeSpan(0, 0, 15))
+        ExcelProcessTools.AssertValidClosedProcess(JitExcelAppProcessID)
+        'Assert.AreEqual(0, ExcelProcessTools.ExcelProcesses.Length, "Excel-COM closed, but still " & ExcelProcessTools.ExcelProcesses.Length & " Excel processes running on this machine")
     End Sub
 
     <Test>
     Public Sub ExcelProcessesConcurrentlyStartedAndClosed()
-        Assert.AreEqual(0, ExcelProcessTools.ExcelProcesses.Length, "Tests can't be executed while Excel processes are started on this machine")
+        'Assert.AreEqual(0, ExcelProcessTools.ExcelProcesses.Length, "Tests can't be executed while Excel processes are started on this machine")
 
         Dim TestClassForExcelApp1 As TestClassForExcelApp = CreateExcelAppViaCom()
-        Assert.AreEqual(1, ExcelProcessTools.ExcelProcesses.Length, "Tests can't be executed while Excel processes are started on this machine")
+        ExcelProcessTools.AssertValidOpenedProcess(TestClassForExcelApp1.ProcessID)
+        'Assert.AreEqual(1, ExcelProcessTools.ExcelProcesses.Length, "Tests can't be executed while Excel processes are started on this machine")
         Assert.AreEqual(False, TestClassForExcelApp1.Visible)
 
         Dim TestClassForExcelApp2 As TestClassForExcelApp = CreateExcelAppViaCom()
-        Assert.AreEqual(2, ExcelProcessTools.ExcelProcesses.Length, "Tests can't be executed while Excel processes are started on this machine")
+        'Assert.AreEqual(2, ExcelProcessTools.ExcelProcesses.Length, "Tests can't be executed while Excel processes are started on this machine")
+        ExcelProcessTools.AssertValidOpenedProcess(TestClassForExcelApp2.ProcessID)
         Assert.AreEqual(False, TestClassForExcelApp2.Visible)
 
         TestClassForExcelApp2.Close()
-        ExcelProcessTools.WaitUntilTrueOrTimeout(Function() ExcelProcessTools.ExcelProcesses.Length = 1, New TimeSpan(0, 0, 15))
-        Assert.AreEqual(1, ExcelProcessTools.ExcelProcesses.Length, "Excel-COM closed, but still " & ExcelProcessTools.ExcelProcesses.Length & " Excel processes running on this machine")
-        Assert.Catch(Of System.Exception)(Function()
-                                              Return TestClassForExcelApp2.Visible
-                                          End Function, "Property shouldn't be accessible any more")
+        ExcelProcessTools.WaitUntilTrueOrTimeout(Function() ExcelProcessTools.ProcessIdExists(TestClassForExcelApp2.ProcessID) = False, New TimeSpan(0, 0, 15))
+        ExcelProcessTools.AssertValidOpenedProcess(TestClassForExcelApp1.ProcessID)
+        ExcelProcessTools.AssertValidClosedProcess(TestClassForExcelApp2.ProcessID)
+        'Assert.AreEqual(1, ExcelProcessTools.ExcelProcesses.Length, "Excel-COM closed, but still " & ExcelProcessTools.ExcelProcesses.Length & " Excel processes running on this machine")
+        Assert.Throws(Of CompuMaster.Reflection.InvokeException)(Function()
+                                                                     Return TestClassForExcelApp2.Visible
+                                                                 End Function, "Property shouldn't be accessible any more")
         Assert.AreEqual(False, TestClassForExcelApp1.Visible, "Property should be accessible further more")
 
         TestClassForExcelApp1.Close()
-        ExcelProcessTools.WaitUntilTrueOrTimeout(Function() ExcelProcessTools.ExcelProcesses.Length = 0, New TimeSpan(0, 0, 15))
-        Assert.AreEqual(0, ExcelProcessTools.ExcelProcesses.Length, "Excel-COM closed, but still " & ExcelProcessTools.ExcelProcesses.Length & " Excel processes running on this machine")
-        Assert.Catch(Of System.Exception)(Function()
-                                              Return TestClassForExcelApp1.Visible
-                                          End Function, "Property shouldn't be accessible any more")
+        ExcelProcessTools.WaitUntilTrueOrTimeout(Function() ExcelProcessTools.ProcessIdExists(TestClassForExcelApp1.ProcessID) = False, New TimeSpan(0, 0, 15))
+        ExcelProcessTools.AssertValidClosedProcess(TestClassForExcelApp1.ProcessID)
+        ExcelProcessTools.AssertValidClosedProcess(TestClassForExcelApp2.ProcessID)
+        'Assert.AreEqual(0, ExcelProcessTools.ExcelProcesses.Length, "Excel-COM closed, but still " & ExcelProcessTools.ExcelProcesses.Length & " Excel processes running on this machine")
+        Assert.Throws(Of CompuMaster.Reflection.InvokeException)(Function()
+                                                                     Return TestClassForExcelApp1.Visible
+                                                                 End Function, "Property shouldn't be accessible any more")
     End Sub
 
     <Test>

@@ -9,6 +9,33 @@ Namespace CompuMaster.ComInterop
     Public NotInheritable Class ComTools
 
         ''' <summary>
+        ''' Lookup the process ID from a Hwnd value
+        ''' </summary>
+        ''' <param name="hwnd"></param>
+        ''' <returns></returns>
+        Public Shared Function LookupProcessID(hwnd As Integer) As Integer
+            Return LookupProcessID(New IntPtr(hwnd))
+        End Function
+
+        ''' <summary>
+        ''' Lookup the process ID from a Hwnd value
+        ''' </summary>
+        ''' <param name="hwnd"></param>
+        ''' <returns></returns>
+        Public Shared Function LookupProcessID(hwnd As IntPtr) As Integer
+            Try
+                Dim ExcelProcessID As UInteger = 0UI
+                Dim ThreadID As UInteger = ComTools.GetWindowThreadProcessId(hwnd, ExcelProcessID)
+                If ThreadID = 0UI OrElse ExcelProcessID = 0UI Then
+                    Throw New ComponentModel.Win32Exception(Runtime.InteropServices.Marshal.GetLastWin32Error(), "GetWindowThreadProcessId failed for Excel window.")
+                End If
+                Return CInt(ExcelProcessID)
+            Catch
+                Return 0
+            End Try
+        End Function
+
+        ''' <summary>
         ''' Release a COM object (using System.Runtime.InteropServices.Marshal.ReleaseComObject respectively FinalReleaseComObject)
         ''' </summary>
         ''' <param name="obj"></param>
@@ -23,6 +50,7 @@ Namespace CompuMaster.ComInterop
                     obj = Nothing
                 End If
             Catch
+                'non-windows platforms or exceptions on windows platform
                 obj = Nothing
             End Try
         End Sub

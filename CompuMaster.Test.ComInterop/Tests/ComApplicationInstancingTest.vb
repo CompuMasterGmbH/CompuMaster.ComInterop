@@ -1,7 +1,10 @@
 ﻿Imports NUnit.Framework
 
+<Parallelizable>
 Public Class ComApplicationInstancingTest
     Inherits ComTestBase
+
+    Private Const EXPLICIT_DISPOSE As Boolean = False
 
     Class ExcelAppByName
         Inherits CompuMaster.ComInterop.ComApplication(Of Object)
@@ -43,14 +46,14 @@ Public Class ComApplicationInstancingTest
         Dim E As New ExcelAppByName
         Assert.AreEqual("Microsoft Excel", E.InvokePropertyGet(Of String)("Name"))
         Assert.NotZero(E.ProcessId)
-        E.Dispose()
+        If EXPLICIT_DISPOSE Then E.Dispose()
     End Sub
 
     <Test> Public Sub TestExcelAppByInteropClass()
         Dim E As New ExcelAppByType
         Assert.AreEqual("Microsoft Excel", E.ComObjectStronglyTyped.Name)
         Assert.NotZero(E.ProcessId)
-        E.Dispose()
+        If EXPLICIT_DISPOSE Then E.Dispose()
     End Sub
 
     <Test> Public Sub TestJitExcelAppByName()
@@ -61,7 +64,7 @@ Public Class ComApplicationInstancingTest
             "EXCEL")
         Assert.AreEqual("Microsoft Excel", E.InvokePropertyGet(Of String)("Name"))
         Assert.NotZero(E.ProcessId)
-        E.Dispose()
+        If EXPLICIT_DISPOSE Then E.Dispose()
     End Sub
 
     <Test> Public Sub TestJitExcelAppByInteropClass()
@@ -72,7 +75,7 @@ Public Class ComApplicationInstancingTest
             "EXCEL")
         Assert.AreEqual("Microsoft Excel", E.ComObjectStronglyTyped.Name)
         Assert.NotZero(E.ProcessId)
-        E.Dispose()
+        If EXPLICIT_DISPOSE Then E.Dispose()
     End Sub
 
 End Class

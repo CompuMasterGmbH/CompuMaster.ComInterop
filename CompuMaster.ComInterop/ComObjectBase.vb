@@ -1,4 +1,4 @@
-Namespace CompuMaster.ComInterop
+ï»¿Namespace CompuMaster.ComInterop
 
     ''' <summary>
     ''' Safe design and implementation for all disposing and finalizing of COM objects and all their child objects
@@ -49,7 +49,7 @@ Namespace CompuMaster.ComInterop
         ''' Has the COM object already been closed and disposed
         ''' </summary>
         ''' <returns></returns>
-        Protected ReadOnly Property IsDisposedComObject As Boolean
+        Public ReadOnly Property IsDisposedComObject As Boolean
             Get
                 Return _ComObject Is Nothing
             End Get
@@ -296,12 +296,12 @@ Namespace CompuMaster.ComInterop
         End Sub
 
         Private disposedValue As Boolean
-        Private isGC As Boolean = False
+        Private isGC As Boolean
 
         ''' <summary>
         ''' Ignore exceptions caused by InvokeMethod calls to invalid objects (for safety and stability of application to not crash because of a failing finalizer)
         ''' </summary>
-        Protected IgnoreMissingMethodExceptionsOnFinalize As Boolean = True
+        Protected Property IgnoreMissingMethodExceptionsOnFinalize As Boolean = True
 
         ''' <summary>
         ''' Close and dispose the COM object and all of its children (if not yet done)
@@ -328,7 +328,7 @@ Namespace CompuMaster.ComInterop
                 End If
 
                 If _ComObject IsNot Nothing Then
-                    'Nicht verwaltete Ressourcen (nicht verwaltete Objekte) freigeben und Finalizer überschreiben
+                    'Nicht verwaltete Ressourcen (nicht verwaltete Objekte) freigeben und Finalizer Ã¼berschreiben
                     If isGC And IgnoreMissingMethodExceptionsOnFinalize Then
                         Try
                             _OnClosing()
@@ -350,7 +350,7 @@ Namespace CompuMaster.ComInterop
                     Else
                         _OnClosed()
                     End If
-                    'Große Felder auf NULL setzen
+                    'GroÃŸe Felder auf NULL setzen
                     _ComObject = Nothing
                 End If
 
@@ -359,7 +359,7 @@ Namespace CompuMaster.ComInterop
         End Sub
 
         Protected Overrides Sub Finalize()
-            ' Ändern Sie diesen Code nicht. Fügen Sie Bereinigungscode in der Methode "Dispose(disposing As Boolean)" ein.
+            ' Ã„ndern Sie diesen Code nicht. FÃ¼gen Sie Bereinigungscode in der Methode "Dispose(disposing As Boolean)" ein.
             isGC = True
             Dispose(disposing:=False)
             MyBase.Finalize()
@@ -370,7 +370,7 @@ Namespace CompuMaster.ComInterop
         ''' </summary>
         ''' <remarks>If <see cref="IgnoreMissingMethodExceptionsOnFinalize"/> is true, suppress exceptions if closing actions of this object or children objects fail</remarks>
         Private Sub IDisposable_Dispose() Implements IDisposable.Dispose
-            ' Ändern Sie diesen Code nicht. Fügen Sie Bereinigungscode in der Methode "Dispose(disposing As Boolean)" ein.
+            ' Ã„ndern Sie diesen Code nicht. FÃ¼gen Sie Bereinigungscode in der Methode "Dispose(disposing As Boolean)" ein.
             isGC = True
             Dispose(disposing:=True)
             GC.SuppressFinalize(Me)
@@ -382,9 +382,8 @@ Namespace CompuMaster.ComInterop
         ''' <exception cref="Exception">If actions fail to close the COM object or its children, an exception is thrown</exception>
         ''' <remarks>Close/dispose actions occur only if not yet closed</remarks>
         Public Sub Dispose()
-            ' Ändern Sie diesen Code nicht. Fügen Sie Bereinigungscode in der Methode "Dispose(disposing As Boolean)" ein.
+            ' Ã„ndern Sie diesen Code nicht. FÃ¼gen Sie Bereinigungscode in der Methode "Dispose(disposing As Boolean)" ein.
             Dispose(disposing:=True)
-            GC.SuppressFinalize(Me)
         End Sub
 #End Region
 

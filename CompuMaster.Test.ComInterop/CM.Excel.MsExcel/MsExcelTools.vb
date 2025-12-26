@@ -26,6 +26,7 @@ Namespace Global.CompuMaster.Excel.MsExcelCom
             Catch ex As Exception
                 Throw New PlatformNotSupportedException("App and installed MS Office must both 64 bit or both 32 bit processed")
             End Try
+            CreateMsExcelAppInstance.Workbooks.Close()
         End Function
 
         Friend Delegate Function WaitUntilTrueConditionTest() As Boolean

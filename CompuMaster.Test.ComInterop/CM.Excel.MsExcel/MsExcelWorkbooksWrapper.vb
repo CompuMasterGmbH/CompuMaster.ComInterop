@@ -6,11 +6,14 @@ Namespace Global.CompuMaster.Excel.MsExcelCom
     ''' COM Wrapper class for MS Excel workbooks collection
     ''' </summary>
     Public Class MsExcelWorkbooksWrapper
-        Inherits CompuMaster.ComInterop.ComChildObject(Of MsExcelApplicationWrapper, MsExcel.Workbooks)
+        Inherits CompuMaster.ComInterop.ComChildObject(Of CompuMaster.ComInterop.ComApplication(Of MsExcel.Application), MsExcel.Workbooks)
 
         Public Sub New(parent As MsExcelApplicationWrapper, obj As MsExcel.Workbooks)
-            MyBase.New(parent, obj)
+            MyBase.New(parent.ComApp, obj)
+            Me.ParentWrapper = parent
         End Sub
+
+        Public ReadOnly Property ParentWrapper As MsExcelApplicationWrapper
 
         ''' <summary>
         ''' Create a new workbook

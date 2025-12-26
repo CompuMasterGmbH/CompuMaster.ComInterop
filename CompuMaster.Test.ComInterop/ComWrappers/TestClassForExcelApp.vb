@@ -1,4 +1,6 @@
-﻿Public Class TestClassForExcelApp
+﻿Imports CompuMaster.ComInterop
+
+Public Class TestClassForExcelApp
     Inherits Global.CompuMaster.ComInterop.ComObjectBase
 
 #Disable Warning CA1416 ' Diese Aufrufsite ist auf allen Plattformen erreichbar
@@ -8,8 +10,12 @@
                    Nothing,
                    Nothing,
                    Nothing)
+        Dim ExcelAppHwnd = Me.InvokePropertyGet(Of Integer)("Hwnd")
+        Me.ProcessID = ComTools.LookupProcessID(ExcelAppHwnd)
     End Sub
 #Enable Warning CA1416 ' Diese Aufrufsite ist auf allen Plattformen erreichbar
+
+    Public ReadOnly Property ProcessID As Integer
 
     Public Property UserControl As Boolean
         Get
