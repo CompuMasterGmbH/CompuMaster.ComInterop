@@ -17,7 +17,7 @@ Public Class ExcelProcessTools
 
     Public Shared Sub AssertValidClosedProcess(processID As Integer)
         AssertValidProcessId(processID)
-        System.Threading.Thread.Sleep(1300)
+        ExcelProcessTools.WaitUntilTrueOrTimeout(Function() ExcelProcessTools.ProcessIdExists(processID) = False, New TimeSpan(0, 0, 60))
         Dim FoundProcess = LookupProcess(processID)
         Assert.Null(FoundProcess, "No process with ID " & processID & " should exist any more")
         System.Console.WriteLine("Process ID " & processID & " " & If(FoundProcess IsNot Nothing, "found", "not found (any more)"))

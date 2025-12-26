@@ -3,10 +3,6 @@
 Public MustInherit Class ComTestBase
 
     Public Sub New()
-        CompuMaster.ComInterop.ComObjectBase.GarbageCollectorLogOutput = New System.IO.FileInfo(System.IO.Path.Combine(System.IO.Path.GetTempPath, "ComInterop.GarbageCollector.log"))
-        If CompuMaster.ComInterop.ComObjectBase.GarbageCollectorLogOutput.Exists = False Then
-            CompuMaster.ComInterop.ComObjectBase.GarbageCollectorLogOutput.Create.Close()
-        End If
     End Sub
 
     Protected Shared Function IsPlatformSupportingComInterop() As Boolean
