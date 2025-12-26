@@ -1,7 +1,7 @@
 ﻿Imports NUnit.Framework
 Imports CompuMaster.Excel.MsExcelCom
 
-<Parallelizable>
+<Parallelizable(ParallelScope.All)>
 Public Class CMExcelMsExcelInstancingTests
     Inherits MsExcelTestBase
 

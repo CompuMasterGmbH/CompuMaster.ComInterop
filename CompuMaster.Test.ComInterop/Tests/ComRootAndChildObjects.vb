@@ -1,7 +1,7 @@
 ﻿Imports NUnit.Framework
 Imports CompuMaster.ComInterop
 
-<Parallelizable>
+<Parallelizable(ParallelScope.All)>
 Public Class ComRootAndChildObjects
 
     <Test>

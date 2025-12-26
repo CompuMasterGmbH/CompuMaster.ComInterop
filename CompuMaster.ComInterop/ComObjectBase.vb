@@ -318,8 +318,9 @@
                         Try
                             _OnDisposeChildren()
                             DisposeRegisteredComChildren()
-                        Catch
+                        Catch ex As Exception
                             'ignore
+                            WriteToLogFileInUnitTestMode("ERROR on OnDisposeChildren: " & ex.ToString() & System.Environment.NewLine)
                         End Try
                     Else
                         _OnDisposeChildren()
@@ -334,18 +335,30 @@
                             _OnClosing()
                         Catch ex As System.MissingMethodException
                             'ignore
-                        Catch
+                            WriteToLogFileInUnitTestMode("ERROR on OnClosing: " & ex.ToString() & System.Environment.NewLine)
+                        Catch ex As Exception
                             'ignore
+                            WriteToLogFileInUnitTestMode("ERROR on OnClosing: " & ex.ToString() & System.Environment.NewLine)
                         End Try
                     Else
                         _OnClosing()
                     End If
-                    ComTools.ReleaseComObject(_ComObject)
+                    If isGC And IgnoreMissingMethodExceptionsOnFinalize Then
+                        Try
+                            ComTools.ReleaseComObject(_ComObject)
+                        Catch ex As Exception
+                            'ignore
+                            WriteToLogFileInUnitTestMode("ERROR on ReleaseComObject: " & ex.ToString() & System.Environment.NewLine)
+                        End Try
+                    Else
+                        ComTools.ReleaseComObject(_ComObject)
+                    End If
                     If isGC And IgnoreMissingMethodExceptionsOnFinalize Then
                         Try
                             _OnClosed()
-                        Catch
+                        Catch ex As Exception
                             'ignore
+                            WriteToLogFileInUnitTestMode("ERROR on OnClosed: " & ex.ToString() & System.Environment.NewLine)
                         End Try
                     Else
                         _OnClosed()
@@ -357,6 +370,25 @@
                 disposedValue = True
             End If
         End Sub
+
+        ''' <summary>
+        ''' Create a log entry in file GarbageCollectorLogOutput
+        ''' </summary>
+        ''' <param name="text"></param>
+        Private Shared Sub WriteToLogFileInUnitTestMode(text As String)
+            Try
+                If GarbageCollectorLogOutput IsNot Nothing Then
+                    System.IO.File.WriteAllText(GarbageCollectorLogOutput.FullName, text & System.Environment.NewLine)
+                End If
+            Catch
+            End Try
+        End Sub
+
+        ''' <summary>
+        ''' Exceptions in dispose/finalize will be logged into this file
+        ''' </summary>
+        ''' <returns></returns>
+        Friend Shared Property GarbageCollectorLogOutput As System.IO.FileInfo
 
         Protected Overrides Sub Finalize()
             ' Ändern Sie diesen Code nicht. Fügen Sie Bereinigungscode in der Methode "Dispose(disposing As Boolean)" ein.

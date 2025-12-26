@@ -1,6 +1,6 @@
 ﻿Imports NUnit.Framework
 
-<Parallelizable>
+<Parallelizable(ParallelScope.All)>
 Public Class ComApplicationInstancingTest
     Inherits ComTestBase
 
@@ -44,6 +44,7 @@ Public Class ComApplicationInstancingTest
 
     <Test> Public Sub TestExcelAppByName()
         Dim E As New ExcelAppByName
+        System.Console.WriteLine(E.ToString)
         Assert.AreEqual("Microsoft Excel", E.InvokePropertyGet(Of String)("Name"))
         Assert.NotZero(E.ProcessId)
         If EXPLICIT_DISPOSE Then E.Dispose()
@@ -51,6 +52,7 @@ Public Class ComApplicationInstancingTest
 
     <Test> Public Sub TestExcelAppByInteropClass()
         Dim E As New ExcelAppByType
+        System.Console.WriteLine(E.ToString)
         Assert.AreEqual("Microsoft Excel", E.ComObjectStronglyTyped.Name)
         Assert.NotZero(E.ProcessId)
         If EXPLICIT_DISPOSE Then E.Dispose()
@@ -62,6 +64,7 @@ Public Class ComApplicationInstancingTest
             Function(x) New IntPtr(x.InvokePropertyGet(Of Integer)("Hwnd")),
             Sub(x) x.InvokeMethod("Quit"),
             "EXCEL")
+        System.Console.WriteLine(E.ToString)
         Assert.AreEqual("Microsoft Excel", E.InvokePropertyGet(Of String)("Name"))
         Assert.NotZero(E.ProcessId)
         If EXPLICIT_DISPOSE Then E.Dispose()
@@ -73,6 +76,7 @@ Public Class ComApplicationInstancingTest
             Function(x) New IntPtr(x.ComObjectStronglyTyped.Hwnd),
             Sub(x) x.ComObjectStronglyTyped.Quit(),
             "EXCEL")
+        System.Console.WriteLine(E.ToString)
         Assert.AreEqual("Microsoft Excel", E.ComObjectStronglyTyped.Name)
         Assert.NotZero(E.ProcessId)
         If EXPLICIT_DISPOSE Then E.Dispose()

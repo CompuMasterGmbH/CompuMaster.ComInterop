@@ -3,6 +3,7 @@
 Public Class KillExcelProcesses
 
     <Test, Explicit("Run on demand, only")>
+    <Obsolete("SHOULD NOT BE REQUIRED ANY MORE", False)>
     Public Sub ForceKillForAllExcelProcesses()
         If ExcelProcessTools.ExcelProcesses.Length = 0 Then Assert.Ignore("Test can be executed ONLY while Excel processes are started on this machine")
         ExcelProcessTools.KillAllExcelProcesses(True)
