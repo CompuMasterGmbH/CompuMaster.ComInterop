@@ -12,6 +12,11 @@ on:
         types: [created]
 
     workflow_dispatch:
+        inputs:
+            release_tag:
+                description: Published GitHub release tag to retry
+                required: true
+                type: string
 
 env:
     # Path to the solution file relative to the root of the project.
@@ -26,18 +31,33 @@ env:
 
 jobs:
     publish:
+        if: github.event_name == 'release' || github.ref_name == github.event.repository.default_branch
         runs-on: ubuntu-latest
         permissions:
             contents: write
+            id-token: write
         #if: false # always skip job
 
         env:
-          VersionPrefix: ${{  github.ref_name }}
+          VersionPrefix: ${{ inputs.release_tag || github.ref_name }}
 
         steps:
             # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
             - name: Checkout
               uses: actions/checkout@v4
+              with:
+                  ref: ${{ inputs.release_tag && format('refs/tags/{0}', inputs.release_tag) || github.ref }}
+                  fetch-depth: 0
+
+            - name: Verify the published release
+              if: github.event_name == 'workflow_dispatch'
+              env:
+                  GH_TOKEN: ${{ github.token }}
+                  RELEASE_TAG: ${{ inputs.release_tag }}
+                  DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+              run: |
+                  test "$(gh release view --repo "$GITHUB_REPOSITORY" --json isDraft --jq .isDraft -- "$RELEASE_TAG")" = false
+                  git merge-base --is-ancestor HEAD "origin/$DEFAULT_BRANCH"
 
             - name: Setup .NET Core
               uses: actions/setup-dotnet@v4
@@ -74,9 +94,15 @@ jobs:
                   name: NuGet packages
                   path: packages/*
 
+            - name: Sign in to NuGet with Trusted Publishing
+              id: nuget-login
+              uses: NuGet/login@v1
+              with:
+                  user: ${{ vars.NUGET_USER || secrets.NUGET_USER || 'compumaster' }}
+
             - name: Push existing package IDs to NuGet
               env:
-                  NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+                  NUGET_API_KEY: ${{ steps.nuget-login.outputs.NUGET_API_KEY }}
               run: |
                   for package in packages/*.nupkg; do
                       name=$(basename "$package")
