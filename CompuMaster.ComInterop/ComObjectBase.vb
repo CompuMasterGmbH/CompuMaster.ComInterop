@@ -345,13 +345,13 @@
                     End If
                     If isGC And IgnoreMissingMethodExceptionsOnFinalize Then
                         Try
-                            ComTools.ReleaseComObject(_ComObject)
+                            ReleaseOwnedComReference(_ComObject)
                         Catch ex As Exception
                             'ignore
                             WriteToLogFileInUnitTestMode("ERROR on ReleaseComObject: " & ex.ToString() & System.Environment.NewLine)
                         End Try
                     Else
-                        ComTools.ReleaseComObject(_ComObject)
+                        ReleaseOwnedComReference(_ComObject)
                     End If
                     If isGC And IgnoreMissingMethodExceptionsOnFinalize Then
                         Try
@@ -369,6 +369,12 @@
 
                 disposedValue = True
             End If
+        End Sub
+
+        ''' <summary>Releases the COM reference held by this wrapper.</summary>
+        ''' <param name="instance">The COM instance being released.</param>
+        Protected Overridable Sub ReleaseOwnedComReference(instance As Object)
+            ComTools.ReleaseComObject(instance)
         End Sub
 
         ''' <summary>

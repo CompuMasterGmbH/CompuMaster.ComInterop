@@ -209,3 +209,8 @@ var ExcelEngine = new CompuMaster.ComInterop.ComApplication<Object>(
 ExcelEngine.Dispose();
 ```
 
+## Office diagnostic logs
+
+`CompuMaster.MsWordComInterop` and `CompuMaster.MsPowerPointComInterop` provide late-bound application wrappers for Word and PowerPoint. Both expose `DiagnosticLogFiles` and `PreserveDiagnosticLogFiles` from `OfficeApplication`. Query the snapshot while a document or presentation window is open so the wrapper can associate its COM application with the corresponding process.
+
+By default, a successful application exit removes confirmed diagnostic files. After an abnormal exit the cleanup trims trailing NUL padding from confirmed logs. Set `PreserveDiagnosticLogFiles` to `True` to retain them byte for byte. Cleanup requires proof of file ownership and uses at most three attempts with 350 ms between attempts.

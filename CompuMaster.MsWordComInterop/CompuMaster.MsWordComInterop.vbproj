@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <RootNamespace>CompuMaster.MsWordComInterop</RootNamespace>
+    <TargetFrameworks>netstandard2.1;net48;net8.0;netcoreapp3.0</TargetFrameworks>
+    <OptionStrict>On</OptionStrict>
+    <Version>1.0.2026.1112</Version>
+    <Authors>CompuMaster GmbH</Authors>
+    <Description>Microsoft Word COM automation with process-scoped diagnostic log management.</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/CompuMasterGmbH/CompuMaster.ComInterop</RepositoryUrl>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CompuMaster.ComInterop\CompuMaster.ComInterop.vbproj" />
+  </ItemGroup>
+</Project>
